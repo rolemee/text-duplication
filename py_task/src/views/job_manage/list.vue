@@ -68,6 +68,7 @@ onMounted(() => {
 })
 
 function getList() {
+    // @1
     data.value.tableData = [
         {
             'jobName': 'a',
@@ -111,7 +112,7 @@ function handleSearch(val, callback) {
     callback && callback()
 }
 
-//table操作
+// table操作
 function handleView(val) {
     console.log(val)
     data.value.formModeProps.title = val.jobName
@@ -136,7 +137,7 @@ function handleEdit(val) {
     data.value.formModeProps.visible = true
 }
 
-//弹窗
+// 弹窗
 function getDataList() {}
 </script>
 

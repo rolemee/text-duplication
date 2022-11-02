@@ -76,9 +76,10 @@ function getList() {
             'CourseName': '网络攻防',
             'jobRemarks': '无',
             'jobStartTime': '1667117394',
-            'jobEndTime': new Date().getTime()/1000,
+            'jobEndTime': new Date().getTime() / 1000,
             'status': '未完成',
-            'color': 'color: red'
+            'color': 'color: red',
+            'completeRatio': 0.11
         }
     ]
     data.value.options['jobType'].push({

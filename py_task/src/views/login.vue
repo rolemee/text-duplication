@@ -40,6 +40,7 @@ const loginRules = ref({
 })
 function handleLogin() {
     proxy.$refs.loginFormRef.validate(valid => {
+
         if (valid) {
             loading.value = true
             userStore.login(loginForm.value).then(() => {

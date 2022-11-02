@@ -17,9 +17,7 @@ const useUserStore = defineStore(
             isLogin: state => {
                 let retn = false
                 if (state.token) {
-                    if (new Date().getTime() < state.failure_time * 1000) {
-                        retn = true
-                    }
+                    retn = true
                 }
                 return retn
             }
@@ -28,17 +26,18 @@ const useUserStore = defineStore(
             login(data) {
                 return new Promise((resolve, reject) => {
                     // 通过 mock 进行登录
-                    api.post('member/login', data, {
-                        baseURL: '/mock/'
-                    }).then(res => {
-                        localStorage.setItem('account', res.data.account)
-                        localStorage.setItem('token', res.data.token)
-                        localStorage.setItem('failure_time', res.data.failure_time)
+                    api.post('/login', data).then(res => {
+                        document.cookie = 'session=' + res.data.session
+                        localStorage.setItem('account', data.account)
+                        localStorage.setItem('token', res.data.session)
+                        // localStorage.setItem('failure_time', res.data.failure_time)
                         this.account = res.data.account
-                        this.token = res.data.token
-                        this.failure_time = res.data.failure_time
+                        this.token = res.data.session
+                        // this.failure_time = res.data.failure_time
+
                         resolve()
                     }).catch(error => {
+                        console.log(error)
                         reject(error)
                     })
                 })
