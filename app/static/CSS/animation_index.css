@@ -1,0 +1,103 @@
+@keyframes change{/*关键帧*/ /*横线特效*/
+    0%{
+        background-image: linear-gradient(to right,#ffffff 20%,lightskyblue 40%);
+    }
+    50%{
+        background-image: linear-gradient(to right,lightskyblue 20%,#ffffff 100%);
+    }
+    80%{
+        background-image: linear-gradient(to right,#ffffff 20%,lightskyblue 60% ,#ffffff 50%);
+    }
+    100%{
+        background-image: linear-gradient(to right,#ffffff 20%,lightskyblue 100%);
+    }
+}
+/*登录界面与注册界面切换*/
+@keyframes jump {
+    0%{
+        transform:rotateX(-10deg) rotateY(50deg) translateX(300px);
+        visibility: visible;
+    }
+    50%{
+        transform:rotateX(-10deg) rotateY(50deg) translateX(0px);
+        visibility: visible;
+    }
+    100%{
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+        visibility: visible;
+    }
+}
+@keyframes jump-show {
+    0%{}
+    100%{
+        transform: rotateX(-10deg) rotateY(50deg) translate3d(0,0,0px) scaleX(1) ;
+        visibility: hidden;
+    }
+}
+@keyframes show {
+    0%,
+    100%{
+        transform: rotateX(-10deg) rotateY(50deg) translate3d(0,0,0px) scaleX(1) ;
+        visibility: hidden;
+    }
+}
+@keyframes reshow {
+    0%{
+        transform: scaleX(0);
+    }
+    100%{
+        transform: scale(0.8);
+        visibility: visible;
+    }
+}
+@keyframes transparent {
+    0%{
+        opacity: 0.6;
+    }
+    50%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 0.6;
+    }
+}
+
+@keyframes move {/*提示信息*/
+    0%{
+        opacity: 0;
+        transform: translateY(200%);
+    }
+    100%{
+        transform: translateY(0%);
+        opacity: 1;
+        box-shadow: -1px 2px 10px rgba(254,45,50,0.6);
+        backdrop-filter: blur(10px) saturate(180%);
+    }
+}
+
+@keyframes lode-back {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@keyframes turn {
+    to {
+        transform: rotate(1turn);
+    }
+    from{
+        transform: rotate(0turn);
+    }
+}
+@keyframes arrow_move {
+    0%,
+    50%{
+        transform:translateY(5px) ;
+    }
+    100%{
+        transform: translateY(-5px);
+    }
+}

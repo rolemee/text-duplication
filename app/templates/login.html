@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 强制定义渲染方式-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edg,chrome=1">
+    <!--移动端页面渲染-->
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable:no">
+    <meta name="author" content="Yotomum_ml">
+    <meta name="description" content="This is a friendly login interface ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0user-scalable=no"><!--防止页面缩放-->
+    <link rel="stylesheet" type="text/css" href="../CSS/iconfont.css"><!--阿里图标-->
+    <link rel="stylesheet" type="text/css" href="../CSS/index.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/animation_index.css">
+    <script type="text/javascript" src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="../JS/random_number.js"></script>
+    <script type="text/javascript" src="../JS/index.js"></script>
+    <script type="text/javascript" src="../JS/Judge.js"></script>
+    <title>Login</title>
+    <base target="_self">
+</head>
+<body>
+    <div class="background_img"></div>
+    <div class="back-view-1"></div>
+    <div class="back-view-2"></div>
+    <div class="Login-box">
+        <h1>Welcome</h1>
+        <form  method="post" id="login-form" target="stop">
+            <div class="user">
+                <!-- 图标 -->
+                <i class="iconfont" >&#xe66c;</i>
+                <input type="text" placeholder="Username/Phone" class="username" name="username" maxlength="13">
+            </div>
+            <div class="password" >
+                <i class="iconfont" >&#xe623;</i>
+                <input type="password" placeholder="Password" class="password" name="password" maxlength="13">
+            </div>
+        </form>
+        <iframe name="stop" style="display: none;"></iframe>
+
+        <div class="verificationCode">
+{#            <div style="display: inline-block"><input type="text" placeholder="验证码" class="code"></div>#}
+{#            <canvas style="display: inline-block" class="randomNumber" width="100px" height="25px"></canvas>#}
+            <div class="line"></div>
+        </div>
+        <button type="submit" id="Login" class="button">
+            登录
+            <div class="button_horizontal"></div>
+            <div class="button_vertical"></div>
+        </button>
+    </div>
+    <button class="register_or_logo_round">注册</button>
+    <div class="register-box">
+        <h1>Register</h1>
+        <form method="post" id="register-form" target="stop">
+            <div class="user">
+                <!-- 图标 -->
+                <i class="iconfont" >&#xe66c;</i>
+                <input type="text" placeholder="Username" class=" username" name="username" maxlength="13">
+            </div>
+            <div class="Phone">
+                <i class="iconfont">&#xe6db;</i>
+                <input type="text" placeholder="Phone" class="phone" name="phone">
+            </div>
+            <div class="password" >
+                <i class="iconfont" >&#xe623;</i>
+                <input type="password" placeholder="Password" class="password" name="password" maxlength="13">
+            </div>
+        </form>
+        <iframe name="stop" style="display: none;"></iframe>
+        <div class="line"></div>
+        <button id="register" class="button" type="submit">
+            注册
+            <div class="button_horizontal"></div>
+            <div class="button_vertical"></div>
+        </button>
+    </div>
+    <div class="toggle">
+        <button class="round-1"></button>
+        <button class="round-2"></button>
+        <button class="round-3"></button>
+        <button class="round-4"></button>
+        <button class="round-5"></button>
+    </div>
+    <div class="back">
+        <div class="load">
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+            <div class="face">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

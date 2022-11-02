@@ -1,0 +1,355 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.background_img{
+    position: absolute;
+    top:0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: url('../img/background.jpg');
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center;
+    background-attachment: fixed;
+}
+.Login-box,.back-view-1,.back-view-2,.register-box{
+    position: absolute;
+    top:0;
+    width: 30%;
+    height: auto;
+    margin:13% 0 0 32%;
+    padding:30px 10px 30px 10px;
+    background-attachment: fixed;
+    text-align: center;
+    box-shadow: -1px 2px 10px rgba(122,122,122,0.5);/*投影*/
+    outline-style:none ;
+    border-radius: 5px;
+    transform-origin: left;
+    transition: all 0.8s ease-in-out 0.6s;
+    visibility: hidden;
+}
+.Login-box{
+    background-image: linear-gradient(to right bottom,rgba(177,223,252,0.3) 16%,rgba(255,255,255,0.3) 60%);
+    visibility: visible;
+    z-index: 2;
+}
+.register-box{
+    background-image: linear-gradient(to right bottom,rgba(177,223,252,0.3) 16%,rgba(255,255,255,0.3) 60%);
+    height: 250px;
+    z-index: 3;
+}
+.register-box:hover{
+    transform:rotateX(-10deg) rotateY(50deg);
+}
+.back-view-1{
+    background-color: rgb(233,233,233);
+    z-index: 1;
+    opacity: 0.2;
+}
+.back-view-2{
+    background-color: rgb(233,233,233);
+    z-index: -1;
+    opacity: 0.1;
+    height: 215px;
+}
+.toggle{
+    position: absolute;
+    top: 27.9%;left: 32%;
+    width: 31.2%;
+    height: 41%;
+    border-radius: 5px;
+    animation: scale 8s ease infinite alternate 0.4s;
+    z-index: -1;
+}
+.toggle button{
+    position: absolute;
+    width: 100px;
+    height:100px;
+    border-radius:100px ;
+    border: none;
+    background:  rgba(135,206,250,0.5);
+    transform-origin: center;
+    animation: transparent 8s infinite 0.4s;
+    transition: all 0.5s ease 0.3s;
+}
+.register_or_logo_round{
+    position: absolute;
+    top:25%;
+    right: 35%;
+    width: 80px;
+    height: 80px;
+    border-radius: 100px;
+    border: white solid 0px;
+    animation-duration: 0s;
+    background: rgb(252,181,89);
+    opacity: 0.6;
+    z-index: 4;
+    box-shadow: -1px 2px 10px rgba(122,122,122,0.5);
+    transform: scale(0.8);
+    transition: all 0.8s ease-in-out;
+}
+.register_or_logo_round:hover{
+    border: white solid 3px;
+    opacity: 0.6;
+    box-shadow:-1px 2px 10px rgba(135,206,250,0.5);
+    transform: scale(0.7);
+}
+.toggle .round-1{
+    bottom: 0;
+    right: 0;
+    transform: translate(20%,60%);
+    opacity: 0.8;
+    backdrop-filter: blur(2px) saturate(20%);
+    box-shadow: -1px 2px 10px rgba(122,122,122,0.5);
+    z-index: 2;
+}
+.toggle .round-2{
+    top:0;
+    left: 0;
+    transform: translate(20%,-40%) scale(0.6);
+    z-index: -1;
+}
+.toggle .round-3{
+    top:20%;
+    right: 0;
+    opacity: 0.3;
+    background: #5df4e8;
+    transform: translate(20%) scale(0.3);
+    z-index: -1;
+}
+.toggle .round-5{
+    background: #cccccc;
+    opacity: 0.5;
+    transform: scale(0.5);
+}
+.toggle .round-4{
+    background: #d5eddc;
+    opacity: 0.3;
+    transform: scale(0.6) translate(50%);
+    bottom: 0;
+    z-index: -1;
+}
+.Login-box h1,.register-box h1{
+    font-family: "微软雅黑";
+    margin-bottom: 10px;
+}
+form input{
+    padding: 2px;
+    margin-bottom:15px;
+    width: 180px;
+    height: 20px;
+    font-size: 15px;
+    font-family: "微软雅黑";
+    border: 1px solid #cccccc;
+    background-color: rgba(255,255,255,0.95);
+    outline-style: none;
+    border-radius: 3px;
+}
+form i{
+    color: #222222;
+    font-size: 18px;
+}
+.Login-box .verificationCode input{
+    width: 90px;
+    height: 27px;
+    margin-bottom: 15px;
+    margin-right: 20%;
+    font-size: 16px;
+    font-family: "微软雅黑";
+    outline-style: none;
+    border: 1px solid #cccccc;
+    background-color: rgba(255,255,255,0.95);
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+.Login-box .verificationCode .randomNumber{
+    border: 1px solid #cccccc;
+    vertical-align: top;
+    box-sizing: border-box;
+    background: white;
+}
+.line{
+    width: 100%;
+    height: 1px;
+    margin-bottom: 15px;
+    background-image: linear-gradient(to right,#ffffff 20%,lightskyblue 40%);
+    will-change: animation;/*提前告知浏览器变化*/
+    animation: change 5s ease infinite alternate 0.5s;/*动画名字 持续时间 速度曲线 循环次数 infinite(往返运动) 延迟时间*/
+}
+form input:focus{
+    outline: none;
+    border: 1px solid lightskyblue;
+    box-shadow: -1px 2px 10px rgba(135,206,250,0.5);
+}
+.Login-box .verificationCode input:focus{
+    outline: none;
+    border: 1px solid lightskyblue;
+    box-shadow: -1px 2px 10px rgba(135,206,250,0.5);
+}
+.button{
+    width: 80px;
+    height: 25px;
+    margin-top: 10px;
+    margin-bottom: 5%;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.4);
+    font-family: "微软雅黑";
+    background: rgba(255,255,255,0.4);
+    position: relative;
+    z-index: 3;
+}
+.button .button_horizontal,.button_vertical{
+    position: absolute;
+    top:-1px;
+    bottom: -1px;
+    left:-1px;
+    right: -1px;
+    will-change: transform;
+    transition: transform 0.8s ease;
+}
+.button .button_horizontal,.button_vertical:before{
+    content: '';
+    position: absolute;
+    border: inherit;/*继承父元素的样式*/
+}
+.button .button_horizontal{
+    left: -15px;
+    right: -15px;
+    border-top:1px solid rgba(255,255,255,0.4);
+    border-bottom:1px solid rgba(255,255,255,0.4);
+    border-left:hidden ;
+    border-right: hidden;
+}
+.button .button_horizontal:before{
+    content:'';
+    position: absolute;
+    top: -15px;
+    bottom: -15px;
+    left: 13px;
+    right: 13px;
+    border-top:1px solid rgba(255,255,255,0.4);
+    border-bottom:1px solid rgba(255,255,255,0.4);
+    border:inherit;
+}
+.button .button_vertical{
+    top:-15px;
+    bottom: -15px;
+    border-right: 1px solid rgba(255,255,255,0.4);
+    border-left: 1px solid rgba(255,255,255,0.4);
+    border-top:hidden ;
+    border-bottom: hidden;
+}
+.button .button_vertical:before{
+    content:'';
+    position: absolute;
+    left: -15px;
+    right: -15px;
+    top: 13px;
+    bottom: 13px;
+    border-top:1px solid rgba(255,255,255,0.4);
+    border-bottom:1px solid rgba(255,255,255,0.4);
+    border:inherit;
+}
+.button:hover .button_horizontal{
+    border-color:rgba(97,250,81,0.8);
+    transform: scaleX(0);
+}
+.button:hover .button_vertical{
+    border-color:rgba(97,250,81,0.8);
+    transform: scaleY(0);
+}
+.button:hover{
+    background: rgba(255,255,255,0.98);
+    border: 1px solid rgba(169,220,251,0.8);
+    box-shadow: -1px 2px 10px rgba(135,206,250,0.5);
+    cursor: pointer;
+}
+.back{
+    position: absolute;
+    top:0;left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: saturate(150%) blur(1px);
+    animation-fill-mode: forwards;
+    visibility: hidden;
+}
+.load{
+    position: absolute;
+    top:40%;
+    bottom: 50%;
+    left: 41%;
+    right: 50%;
+    height: 150px;
+    width: 15%;
+    z-index: 5;
+    background: rgba(0,0,0,0.5);
+    border-radius: 5px;
+    transition: all 0.8s ease-in-out 0.2s;
+    visibility: hidden;
+}
+.load .face{
+    position: absolute;
+    border-radius: 50%;
+    border-style: solid;
+    border-color: red;
+    animation: turn 3s linear infinite ;
+}
+.load .face{
+    bottom: 5px;
+    border-color: currentColor currentColor transparent transparent;
+    border-width: 2px 2px 0 0;
+}
+.load .face:nth-child(1){
+    top: 5%;
+    left: 20%;
+    width: 60%;
+    height: 90%;
+    color: gold;
+    border-radius: 50%;
+    animation-direction: normal;
+    transform: rotate(-45deg);
+}
+.load .face:nth-child(2){
+    top:15%;
+    left: 28%;
+    width: 40%;
+    height:60%;
+    color: lime;
+    transform: rotate(-100deg);
+    animation-direction: reverse;
+}
+.load .face .circle {
+    position: absolute;
+    height: 1px;
+    background-color: transparent;
+    transform-origin: left;
+}
+.load .face:nth-child(1) .circle{
+    width: 50%;
+    right: 45%;
+    top: 100%;
+}
+.load .face:nth-child(2) .circle{
+    width: 10%;
+    bottom:65%;
+    right: 100%;
+}
+.load .face .circle::before {
+    position: absolute;
+    top: -0.5em;
+    right: -0.5em;
+    content: '';
+    width: 1em;
+    height: 1em;
+    background-color: currentColor;
+    border-radius: 50%;
+    box-shadow: 0 0 2em,
+    0 0 4em,
+    0 0 6em,
+    0 0 8em,
+    0 0 10em,
+    0 0 0 0.5em rgba(255, 255, 0, 0.1);
+}
+
