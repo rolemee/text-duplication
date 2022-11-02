@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="stylesheet" href="/index.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title><%= title %></title>
+    </head>
+    <body>
+        <div id="app">
+            <div class="fantastic-admin-home">
+                <div class="loading">
+                    <div class="square"></div>
+                    <div class="square"></div>
+                    <div class="square"></div>
+                    <div class="square"></div>
+                </div>
+                <div class="text"><%= title %>载入中…</div>
+            </div>
+        </div>
+        <script type="module" src="/src/main.js"></script>
+        <% if (debugTool == 'eruda') { %>
+            <script src="//unpkg.com/eruda/eruda.js"></script>
+            <script>eruda.init();</script>
+        <% } %>
+        <% if (debugTool == 'vconsole') { %>
+            <script src="//unpkg.com/vconsole/dist/vconsole.min.js"></script>
+            <script>new VConsole();</script>
+        <% } %>
+    </body>
+</html>
