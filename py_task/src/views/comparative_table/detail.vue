@@ -1,4 +1,5 @@
 <script setup name="taskManageList">
+import api from '@/api/index'
 
 const route = useRoute()
 const router = useRouter()
@@ -50,13 +51,20 @@ function handleClick(val) {
         name: 'detailMatch',
         params: {
             homeworkId: route.params.workId,
-            id: val.id1
+            leftName: val.id1,
+            rightName: val.id2
         }
     })
 }
 
 onMounted(() => {
-
+    api.get('/testa', {
+        params: {
+            homeworkId: route.params.workId,
+        }
+    }).then(res => {
+        data.value.tableData = res.data
+    })
 })
 
 </script>

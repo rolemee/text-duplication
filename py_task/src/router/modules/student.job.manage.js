@@ -36,7 +36,7 @@ export default {
             },
             children: [
                 {
-                    path: 'detail/:homeworkId/:id',
+                    path: 'detail/:homeworkId/:rightName/:leftName',
                     name: 'detailMatch',
                     component: () => import('@/views/detail_show/index.vue'),
                     meta: {
