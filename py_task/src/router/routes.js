@@ -114,7 +114,7 @@ let systemRoutes = [
 ]
 
 import JobManage from './modules/job.manage'
-import StudentJobManage from './modules/student_job_manage'
+import StudentJobManage from './modules/student.job.manage'
 
 // 动态路由（异步路由、导航栏路由）
 let asyncRoutes = [

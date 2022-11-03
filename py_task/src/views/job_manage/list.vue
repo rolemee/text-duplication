@@ -11,6 +11,10 @@ import detailTable from "@/views/job_manage/detailTable"
 import detailForm from "@/views/job_manage/detailForm"
 import FormMode from './components/FormMode/index.vue'
 
+
+import useUserStore from '@/store/modules/user'
+const userStore = useUserStore()
+
 let formDetail = ref(detailForm.view.form)
 const data = ref({
     loading: false,
@@ -59,7 +63,12 @@ const data = ref({
         title: '',
         disabled: false,
         type: '',
-        id: ''
+        id: '',
+        uploadData: {
+            token: {
+                'token': userStore.token || ''
+            }
+        }
     },
 })
 
@@ -68,7 +77,6 @@ onMounted(() => {
 })
 
 function getList() {
-    // @1
     data.value.tableData = [
         {
             'jobName': 'a',
@@ -112,7 +120,7 @@ function handleSearch(val, callback) {
     callback && callback()
 }
 
-// table操作
+//table操作
 function handleView(val) {
     console.log(val)
     data.value.formModeProps.title = val.jobName
@@ -127,7 +135,7 @@ function handleView(val) {
     data.value.formModeProps.visible = true
 }
 function handleEdit(val) {
-    console.log(val)
+    // console.log(val)
     console.log('编辑')
     data.value.formModeProps.title = val.jobName
     data.value.formModeProps.id = val.id
@@ -137,7 +145,7 @@ function handleEdit(val) {
     data.value.formModeProps.visible = true
 }
 
-// 弹窗
+//弹窗
 function getDataList() {}
 </script>
 
@@ -161,6 +169,7 @@ function getDataList() {}
             :type="data.formModeProps.type"
             :disabled="data.formModeProps.disabled"
             :data="data.formModeProps.data"
+            :uploadData="data.formModeProps.uploadData.token"
             v-model="data.formModeProps.visible"
             :mode="data.formMode"
             @success="getDataList"

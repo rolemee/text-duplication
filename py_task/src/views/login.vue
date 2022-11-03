@@ -38,9 +38,10 @@ const loginRules = ref({
         { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' }
     ]
 })
-function handleLogin() {
-    proxy.$refs.loginFormRef.validate(valid => {
 
+const loginFormRef = ref()
+function handleLogin() {
+    loginFormRef.value.validate(valid => {
         if (valid) {
             loading.value = true
             userStore.login(loginForm.value).then(() => {
@@ -54,77 +55,6 @@ function handleLogin() {
             }).catch(() => {
                 loading.value = false
             })
-        }
-    })
-}
-
-// 注册
-const registerForm = ref({
-    account: '',
-    captcha: '',
-    password: '',
-    checkPassword: ''
-})
-const registerRules = ref({
-    account: [
-        { required: true, trigger: 'blur', message: '请输入用户名' }
-    ],
-    captcha: [
-        { required: true, trigger: 'blur', message: '请输入验证码' }
-    ],
-    password: [
-        { required: true, trigger: 'blur', message: '请输入密码' },
-        { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' }
-    ],
-    checkPassword: [
-        { required: true, trigger: 'blur', message: '请再次输入密码' },
-        { validator: (rule, value, callback) => {
-            if (value !== registerForm.password) {
-                callback(new Error('两次输入的密码不一致'))
-            } else {
-                callback()
-            }
-        } }
-    ]
-})
-function handleRegister() {
-    ElMessage({
-        message: '注册模块仅提供界面演示，无实际功能，需开发者自行扩展',
-        type: 'warning'
-    })
-    proxy.$refs.registerFormRef.validate(valid => {
-        if (valid) {
-            // 这里编写业务代码
-        }
-    })
-}
-
-// 重置密码
-const resetForm = ref({
-    account: localStorage.login_account || '',
-    captcha: '',
-    newPassword: ''
-})
-const resetRules = ref({
-    account: [
-        { required: true, trigger: 'blur', message: '请输入用户名' }
-    ],
-    captcha: [
-        { required: true, trigger: 'blur', message: '请输入验证码' }
-    ],
-    newPassword: [
-        { required: true, trigger: 'blur', message: '请输入新密码' },
-        { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' }
-    ]
-})
-function handleReset() {
-    ElMessage({
-        message: '重置密码模块仅提供界面演示，无实际功能，需开发者自行扩展',
-        type: 'warning'
-    })
-    proxy.$refs.resetFormRef.validate(valid => {
-        if (valid) {
-            // 这里编写业务代码
         }
     })
 }
@@ -144,11 +74,6 @@ function showPassword() {
     })
 }
 
-function testAccount(account) {
-    loginForm.value.account = account
-    loginForm.value.password = '123456'
-    handleLogin()
-}
 </script>
 
 <template>
@@ -188,127 +113,7 @@ function testAccount(account) {
                         </el-input>
                     </el-form-item>
                 </div>
-                <div class="flex-bar">
-                    <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
-                    <el-link type="primary" :underline="false" @click="formType = 'reset'">忘记密码了?</el-link>
-                </div>
                 <el-button :loading="loading" type="primary" size="large" style="width: 100%;" @click.prevent="handleLogin">登录</el-button>
-                <div class="sub-link">
-                    <span class="text">还没有帐号?</span>
-                    <el-link type="primary" :underline="false" @click="formType = 'register'">创建新帐号</el-link>
-                </div>
-                <div style="margin-top: 20px; margin-bottom: -20px; text-align: center;">
-                    <el-divider>演示账号一键登录</el-divider>
-                    <el-button type="primary" size="small" plain @click="testAccount('admin')">admin</el-button>
-                    <el-button size="small" plain @click="testAccount('test')">test</el-button>
-                </div>
-            </el-form>
-            <el-form v-show="formType == 'register'" ref="registerFormRef" :model="registerForm" :rules="registerRules" class="login-form" auto-complete="on">
-                <div class="title-container">
-                    <h3 class="title">探索从这里开始! 🚀</h3>
-                </div>
-                <div>
-                    <el-form-item prop="account">
-                        <el-input ref="name" v-model="registerForm.account" placeholder="用户名" tabindex="1" autocomplete="on">
-                            <template #prefix>
-                                <el-icon>
-                                    <svg-icon name="user" />
-                                </el-icon>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="captcha">
-                        <el-input ref="captcha" v-model="registerForm.captcha" placeholder="验证码" tabindex="2" autocomplete="on">
-                            <template #prefix>
-                                <el-icon>
-                                    <svg-icon name="captcha" />
-                                </el-icon>
-                            </template>
-                            <template #append>
-                                <el-button>发送验证码</el-button>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="password">
-                        <el-input ref="password" v-model="registerForm.password" :type="passwordType" placeholder="密码" tabindex="3" autocomplete="on">
-                            <template #prefix>
-                                <el-icon>
-                                    <svg-icon name="password" />
-                                </el-icon>
-                            </template>
-                            <template #suffix>
-                                <el-icon>
-                                    <svg-icon :name="passwordType === 'password' ? 'eye' : 'eye-open'" @click="showPassword" />
-                                </el-icon>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="checkPassword">
-                        <el-input ref="checkPassword" v-model="registerForm.checkPassword" :type="passwordType" placeholder="确认密码" tabindex="4" autocomplete="on">
-                            <template #prefix>
-                                <el-icon>
-                                    <svg-icon name="password" />
-                                </el-icon>
-                            </template>
-                            <template #suffix>
-                                <el-icon>
-                                    <svg-icon :name="passwordType === 'password' ? 'eye' : 'eye-open'" @click="showPassword" />
-                                </el-icon>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-                </div>
-                <el-button :loading="loading" type="primary" size="large" style="width: 100%; margin-top: 20px;" @click.prevent="handleRegister">注册</el-button>
-                <div class="sub-link">
-                    <span class="text">已经有帐号?</span>
-                    <el-link type="primary" :underline="false" @click="formType = 'login'">去登录</el-link>
-                </div>
-            </el-form>
-            <el-form v-show="formType == 'reset'" ref="resetFormRef" :model="resetForm" :rules="resetRules" class="login-form" auto-complete="on">
-                <div class="title-container">
-                    <h3 class="title">忘记密码了? 🔒</h3>
-                </div>
-                <div>
-                    <el-form-item prop="account">
-                        <el-input ref="name" v-model="resetForm.account" placeholder="用户名" tabindex="1" autocomplete="on">
-                            <template #prefix>
-                                <el-icon>
-                                    <svg-icon name="user" />
-                                </el-icon>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="captcha">
-                        <el-input ref="captcha" v-model="resetForm.captcha" placeholder="验证码" tabindex="2" autocomplete="on">
-                            <template #prefix>
-                                <el-icon>
-                                    <svg-icon name="captcha" />
-                                </el-icon>
-                            </template>
-                            <template #append>
-                                <el-button>发送验证码</el-button>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item prop="newPassword">
-                        <el-input ref="newPassword" v-model="resetForm.newPassword" :type="passwordType" placeholder="新密码" tabindex="3" autocomplete="on">
-                            <template #prefix>
-                                <el-icon>
-                                    <svg-icon name="password" />
-                                </el-icon>
-                            </template>
-                            <template #suffix>
-                                <el-icon>
-                                    <svg-icon :name="passwordType === 'password' ? 'eye' : 'eye-open'" @click="showPassword" />
-                                </el-icon>
-                            </template>
-                        </el-input>
-                    </el-form-item>
-                </div>
-                <el-button :loading="loading" type="primary" size="large" style="width: 100%; margin-top: 20px;" @click.prevent="handleReset">确认</el-button>
-                <div class="sub-link">
-                    <el-link type="primary" :underline="false" @click="formType = 'login'">返回登录</el-link>
-                </div>
             </el-form>
         </div>
         <Copyright v-if="settingsStore.copyright.enable" />

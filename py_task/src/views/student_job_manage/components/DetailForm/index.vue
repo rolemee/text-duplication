@@ -111,7 +111,7 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-.upload-video ::v-deep {
+.upload-video :deep {
     margin: 0;
     .el-upload-dragger {
         padding: 0;

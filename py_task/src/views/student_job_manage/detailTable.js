@@ -24,8 +24,9 @@ let detailTable = {
         },
         {
             prop: 'completeRatio',
-            label: '完成比例'
-
+            label: '完成比例',
+            icon: 'ep:circle-check-filled',
+            iconText: true
         }
     ],
     option: {

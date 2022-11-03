@@ -11,6 +11,9 @@ import detailTable from "./detailTable"
 import detailForm from "./detailForm"
 import FormMode from './components/FormMode/index.vue'
 
+const router = useRouter()
+
+
 let formDetail = ref(detailForm.view.form)
 const data = ref({
     loading: false,
@@ -71,13 +74,11 @@ function getList() {
     data.value.tableData = [
         {
             'jobName': 'a',
-            'jobType': 'code',
-            'jobTeacher': '蒋师傅',
             'CourseName': '网络攻防',
+            'teacherClass': '1、2',
             'jobRemarks': '无',
             'jobStartTime': '1667117394',
             'jobEndTime': new Date().getTime() / 1000,
-            'status': '未完成',
             'color': 'color: red',
             'completeRatio': 0.11
         }
@@ -88,11 +89,11 @@ function getList() {
     })
 }
 
-//搜索栏
-//下拉表
+// 搜索栏
+// 下拉表
 function remoteMethod() {}
 function onChange() {}
-//搜索
+// 搜索
 function handleSearch(val, callback) {
     data.value.searchData.searchString = {}
     data.value.searchData.searchTime = {}
@@ -112,22 +113,17 @@ function handleSearch(val, callback) {
     callback && callback()
 }
 
-//table操作
-function handleView(val) {
-    console.log(val)
-    data.value.formModeProps.title = val.jobName
-    data.value.formModeProps.id = val.id
-    data.value.formModeProps.type = 'view'
-    formDetail.value = JSON.parse(JSON.stringify(detailForm.view.form))
-    formDetail.value[formDetail.value.length-1]['link'] = {//获取链接
-        src: 'https://ctf.show/',
-        name: 'ctf'
-    }
-    data.value.formModeProps.disabled = true
-    data.value.formModeProps.visible = true
+// table操作
+function handleView() {
+    router.push({
+        name: 'taskManageList',
+        params: {
+            workId: 1,
+        }
+    })
 }
 function handleEdit(val) {
-    console.log(val)
+    // console.log(val)
     console.log('编辑')
     data.value.formModeProps.title = val.jobName
     data.value.formModeProps.id = val.id
@@ -137,7 +133,7 @@ function handleEdit(val) {
     data.value.formModeProps.visible = true
 }
 
-//弹窗
+// 弹窗
 function getDataList() {}
 </script>
 

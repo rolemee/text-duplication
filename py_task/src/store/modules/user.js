@@ -10,34 +10,29 @@ const useUserStore = defineStore(
         state: () => ({
             account: localStorage.account || '',
             token: localStorage.token || '',
-            failure_time: localStorage.failure_time || '',
             permissions: []
         }),
         getters: {
             isLogin: state => {
-                let retn = false
-                if (state.token) {
-                    retn = true
-                }
-                return retn
+                // let retn = false
+                // if (state.token) {
+                //     retn = true
+                // }
+                // return retn
+                return true
             }
         },
         actions: {
             login(data) {
                 return new Promise((resolve, reject) => {
-                    // 通过 mock 进行登录
                     api.post('/login', data).then(res => {
                         document.cookie = 'session=' + res.data.session
-                        localStorage.setItem('account', data.account)
+                        localStorage.setItem('account', res.data.account)
                         localStorage.setItem('token', res.data.session)
-                        // localStorage.setItem('failure_time', res.data.failure_time)
                         this.account = res.data.account
-                        this.token = res.data.session
-                        // this.failure_time = res.data.failure_time
-
+                        this.token = res.data.token
                         resolve()
                     }).catch(error => {
-                        console.log(error)
                         reject(error)
                     })
                 })
@@ -48,10 +43,8 @@ const useUserStore = defineStore(
                     const menuStore = useMenuStore()
                     localStorage.removeItem('account')
                     localStorage.removeItem('token')
-                    localStorage.removeItem('failure_time')
                     this.account = ''
                     this.token = ''
-                    this.failure_time = ''
                     routeStore.removeRoutes()
                     menuStore.setActived(0)
                     resolve()
@@ -69,19 +62,6 @@ const useUserStore = defineStore(
                     }).then(res => {
                         this.permissions = res.data.permissions
                         resolve(res.data.permissions)
-                    })
-                })
-            },
-            editPassword(data) {
-                return new Promise(resolve => {
-                    api.post('member/edit/password', {
-                        account: this.account,
-                        password: data.password,
-                        newpassword: data.newpassword
-                    }, {
-                        baseURL: '/mock/'
-                    }).then(() => {
-                        resolve()
                     })
                 })
             }

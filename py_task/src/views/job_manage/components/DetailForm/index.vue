@@ -5,7 +5,6 @@
             :rules="myRule"
             label-suffix=":"
             label-width="100px"
-            :disabled="props.disabled"
         >
             <template v-for="(item,index) in props.data" :key="index" >
                 <el-form-item :label="item.label" :prop="item.name">
@@ -14,6 +13,7 @@
                         size="default"
                         v-model="data.form[item.name]"
                         type="datetime"
+                        :disabled="props.disabled"
                         :default-value="new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDay())"
                         clearable
                     />
@@ -22,12 +22,23 @@
                         <el-link :href="item.link.src" type="primary" target="_blank">{{item.link.name}}</el-link>
                     </template>
                     <template v-else-if="item.type === 'upload'">
-                        <div>//上传还没写</div>
+                        <el-upload
+                            drag
+                            :action="item.uploadUrl"
+                            :data="props.uploadData"
+                            class="upload"
+                            :on-success="onSuccess"
+                        >
+                            <el-button type="primary" text>
+                                上传文件
+                            </el-button>
+                        </el-upload>
                     </template>
                     <el-input
                         v-else
                         v-model="data.form[item.name]"
                         :placeholder="item.placeholder"
+                        :disabled="props.disabled"
                         clearable
                     />
                 </el-form-item>
@@ -59,6 +70,10 @@ const props = defineProps({
     id: {
         type: [Number, String],
         default: null
+    },
+    uploadData: {
+        type: Object,
+        default: {}
     }
 })
 
@@ -101,6 +116,9 @@ function getForm(){//通过id获取数据
     //         delete data.value.form[item.name]
     // })
 }
+function onSuccess() {
+    console.log("上传成功")
+}
 
 defineExpose({
     submit(callback){
@@ -111,7 +129,14 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-.upload-video ::v-deep {
+.upload-video :deep {
+    margin: 0;
+    .el-upload-dragger {
+        padding: 0;
+        border: none;
+    }
+}
+.upload :deep{
     margin: 0;
     .el-upload-dragger {
         padding: 0;

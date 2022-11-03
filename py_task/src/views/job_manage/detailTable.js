@@ -41,6 +41,7 @@ let detailTable = {
             label: '完成状态',
             icon: 'ep:compass',
             sortable: true,
+            iconText: true
         }
     ],
     option: {

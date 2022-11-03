@@ -19,14 +19,14 @@ export default [
         method: 'get',
         response: option => {
             let permissions = []
-            if (option.query.account == 'teacher') {
+            if (option.query.account == 'admin') {
                 permissions = [
                     'permission.browse',
                     'permission.create',
                     'permission.edit',
                     'permission.remove'
                 ]
-            } else if (option.query.account == 'student') {
+            } else if (option.query.account == 'test') {
                 permissions = [
                     'permission.browse'
                 ]

@@ -70,9 +70,13 @@
                    </template>
                    <!-- 判断数据列是有图标 显示为图标 文字-->
                    <template v-else-if="column.hasOwnProperty('icon')">
-                       <div :style="scope.row.color">
+                       <div :style="scope.row.color" v-if="column.iconText">
                            <svg-icon :name="column.icon"/>
                            <span>{{scope.row[column.prop]}}</span>
+                       </div>
+                       <div :style="scope.row.color" v-else>
+                           <span>{{scope.row[column.prop]}}</span>
+                           <svg-icon :name="column.icon"/>
                        </div>
                    </template>
                </template>
@@ -196,9 +200,9 @@ const props = defineProps({
 })
 
 // onMounted(()=>{
-//     // console.log(JSON.stringify(props.switch))
-//     // console.log(data.value.total)
-//     console.log(dataLoading.value)
+    // console.log(JSON.stringify(props.switch))
+    // console.log(data.value.total)
+    // console.log(props.option.border)
 // })
 // onUpdated(() => {
 //     console.log(props.pagination)
@@ -309,11 +313,11 @@ function handleCommand(val) {
 }
 </script>
 <style  lang="scss" scoped>
-::v-deep(.el-table th.gutter) {
+:deep(.el-table th.gutter) {
     /* 解决element-ui 表格篡位的问题 */
     display: table-cell !important;
 }
-::v-deep(.el-switch__core) {
+:deep(.el-switch__core) {
     width: 46px;
     .el-switch__inner{
         .is-text {

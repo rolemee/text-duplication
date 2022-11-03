@@ -50,7 +50,8 @@ let detailForm = {
             },
             {
                 label: '提交',
-                type: 'upload'
+                type: 'upload',
+                uploadUrl: 'https://jsonplaceholder.typicode.com/posts/'
             }
         ]
     }
