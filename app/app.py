@@ -1,10 +1,16 @@
-import jwt
 import os
+
+import requests
+
 import module.check_login
 from flask import *
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from __init__ import init
+
+import test2.code_diff
+import test2.return_string
+
 app = init()
 cors = CORS(app)
 SECRET_KEY = os.urandom(24)
@@ -45,4 +51,31 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
+@app.route('/testa', methods=['GET', 'POST'])
+def testa():
+    return json.dumps({"status": 1,
+                       "error": "",
+                       "data":  test2.code_diff.jplag()})
+@app.route('/testb', methods=['GET', 'POST'])
+def testb():
+    return json.dumps({"status": 1,
+                       "error": "",
+                       "data": test2.code_diff.sim()})
+@app.route('/testc', methods=['GET', 'POST'])
+def testc():
+    name=request.args.get("filename")
+    return render_template_string(test2.return_string.ret(name))
+@app.route('/testd', methods=['GET', 'POST'])
+def testd():
+    file1 = request.args.get("file1")
+    file2 = request.args.get("file2")
+    name=request.args.get("filename")
+    for i in test2.code_diff.sim():
+        if i['id1'] == file1 and i['id2'] == file2:
+            return {"status": 1,
+                       "error": "",
+                       "data":  i['matches']}
+    return {"status": 0,
+                       "error": "no such file",
+                       "data":  []}
 app.run(host=host,port=port)

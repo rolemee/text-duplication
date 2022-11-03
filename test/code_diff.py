@@ -71,4 +71,3 @@ def jplag():
     # os.unlink("tmp.zip")
 # jplag()
 
-sim()

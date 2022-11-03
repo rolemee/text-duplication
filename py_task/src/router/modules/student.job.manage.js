@@ -19,7 +19,7 @@ export default {
                 sidebar: false,
                 breadcrumb: false,
                 activeMenu: '/student_job_manage',
-                cache: ['taskManageList','detailMatch']
+                cache: ['taskManageList', 'detailMatch']
             }
         },
         {

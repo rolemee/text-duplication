@@ -8,7 +8,7 @@ import zipfile
 def sim():
     res = []
     res_dict = {}
-    a = os.popen("sim_c++.exe -p -T -s -e -R submissions").read()
+    a = os.popen("test2\\sim_c++.exe -p -T -s -e -R test2\\submissions").read()
     a = a.rstrip("\n")
     a = a.split("\n")[2:]
     # print(a)
@@ -18,7 +18,7 @@ def sim():
         similarity = int(re.findall(r"consists for (\d+) % of ",i)[0])
         if similarity > 50:
             file_list = re.findall(r"(submissions/[\w\W]*?) ",i)
-            cmd = "sim_c++.exe -d -T -s "+file_list[0]+" "+file_list[1]
+            cmd = "test2\\sim_c++.exe -d -T -s test2/"+file_list[0]+" test2/"+file_list[1]
             a = os.popen(cmd).read()
             # print(a)
             # print(a.split("\n\n")[1].split("\n")[0])
@@ -42,7 +42,8 @@ def sim():
             res.append(copy.deepcopy(res_dict))
             # print(res_dict)
             # exit(0)
-    print(json.dumps(res))
+    # print(json.dumps(res))
+    return res
         # try:
         #     if int(re.findall(r"consists for (\d+) % of ",i)[0])>50:
         #         a = os.popen("sim_c++.exe -d -T -s -e -R submissions").read()
@@ -56,8 +57,8 @@ def sim():
         #     print(i)
         #     exit(0)
 def jplag():
-    os.system("java -jar jplag.jar -l cpp -r tmp   submissions")
-    archive = zipfile.ZipFile('tmp.zip', 'r')
+    os.system("test2\\java -jar jplag.jar -l cpp -r tmp   test2\\submissions")
+    archive = zipfile.ZipFile('test2\\tmp.zip', 'r')
     # Let us verify the operation..
     txtdata = archive.read('overview.json')
     file_compare_list = json.loads(txtdata.decode())['metrics'][0]['topComparisons']
@@ -65,9 +66,10 @@ def jplag():
     for i in file_compare_list:
         if float(i['similarity']) >= 0.5:
             txtdata = archive.read(i['first_submission']+"-"+i['second_submission']+".json")
-            similarity_list.append(txtdata.decode())
+            similarity_list.append(eval(txtdata.decode()))
     print(similarity_list)
     archive.close()
+    return similarity_list
     # os.unlink("tmp.zip")
 # jplag()
 
