@@ -42,7 +42,7 @@ def sim():
             res.append(copy.deepcopy(res_dict))
             # print(res_dict)
             # exit(0)
-    # print(json.dumps(res))
+    print(json.dumps(res))
     return res
         # try:
         #     if int(re.findall(r"consists for (\d+) % of ",i)[0])>50:
@@ -72,4 +72,5 @@ def jplag():
     return similarity_list
     # os.unlink("tmp.zip")
 # jplag()
-
+# code_diff.sim()
+print(sim())

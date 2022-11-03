@@ -5,7 +5,7 @@ const route = useRoute()
 const router = useRouter()
 
 function goBack() {
-    router.push({name: 'taskManageList'})
+    router.push({ name: 'taskManageList' })
 }
 
 const data = ref({
@@ -22,7 +22,22 @@ const data = ref({
     right: {
         start: [],
         end: []
-    }
+    },
+    colors: [],
+    issame: 0,
+    colorlists: [
+        '#e6194B',
+        '#3cb44b',
+        '#ffe119',
+        '#4363d8',
+        '#f58231',
+        '#911eb4',
+        '#42d4f4',
+        '#f032e6',
+        '#bfef45',
+        '#fabed4',
+        'blueviolet'
+    ]
 })
 const setKeyWord  = ref()
 
@@ -30,43 +45,73 @@ onMounted(() => {
     api.get('/testd', {
         params: {
             homeworkId: route.params.homeworkId,
-            file1: route.params.rightName,
-            file2: route.params.leftName
+            file1: route.params.leftName,
+            file2: route.params.rightName
         }
     }).then(res => {
+        let tmp = 0
         res.data.forEach(item => {
             // console.log(item.start1)
             data.value.left.start.push(item.start1)
             data.value.right.start.push(item.start2)
             data.value.left.end.push(item.end1)
             data.value.right.end.push(item.end2)
+            data.value.colors.push(tmp)
+            tmp++
         })
         // console.log(data.value.right)
-        api.get(`testc?filename=${route.params.leftName}`).then(res => {
-            let left = JSON.parse(JSON.stringify(res))
-            left = left.replace(eval("/"+'<'+"/g"), '&lt;')
-            let cache = left.split('\n')
-            for (let j = 0; j < data.value.left.start.length; j++) {
-                for (let i = data.value.left.start[j]-1; i < data.value.left.end[j]; i++ ) {
-                    left = left.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
-                }
-            }
-            data.value.leftData = left
-            // console.log(cache)
-        })
         api.get(`testc?filename=${route.params.rightName}`).then(res => {
             let right = JSON.parse(JSON.stringify(res))
-            right = right.replace(eval("/"+'<'+"/g"), '&lt;')
+            right = right.replace(eval('/' + '<' + '/g'), '&lt;')
+            right = right.replace(eval('/' + '<' + '/g'), '&gt;')
             let cache = right.split('\n')
+            right = cache
             for (let j = 0; j < data.value.right.start.length; j++) {
                 // console.log(data.value.right.start[j])
-                for (let i = data.value.right.start[j]-1; i < data.value.right.end[j]; i++ ) {
-                    right = right.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
+                for (let i = data.value.right.start[j] - 1; i < data.value.right.end[j]; i++) {
+                    if (right[i].indexOf('style="color') !== -1) {
+                        continue
+                    }
+                    right[i] = right[i].replace(cache[i], `<span style="color: ${data.value.colorlists[data.value.colors[j]]}">${cache[i]}</span>`)
                 }
             }
-            data.value.rightData = right
+            for (let i = 0; i < right.length; i++) {
+                data.value.rightData += right[i] + '\n'
+            }
             // console.log(cache)
         })
+        api.get(`testc?filename=${route.params.leftName}`).then(res => {
+            let left = JSON.parse(JSON.stringify(res))
+            left = left.replace(eval('/' + '<' + '/g'), '&lt;')
+            left = left.replace(eval('/' + '>' + '/g'), '&gt;')
+
+            let cache = left.split('\n')
+            left = left.split('\n')
+            console.log(data.value.left.start)
+            console.log(data.value.left.end)
+            console.log(left)
+            console.log(cache)
+            let before_start = '0'
+            let before_end = '0'
+            let flag = -1
+            for (let j = 0; j < data.value.left.start.length; j++) {
+                if (before_end === data.value.right.end[j] && before_start === data.value.right.start[j]) {
+                    console.log(1)
+                } else {
+                    before_start = data.value.right.start[j]
+                    before_end = data.value.right.end[j]
+                    flag++
+                }
+                for (let i = data.value.left.start[j] - 1; i < data.value.left.end[j]; i++) {
+                    left[i] = left[i].replace(cache[i], `<span style="color: ${data.value.colorlists[data.value.colors[flag]]}">${cache[i]}</span>`)
+                }
+            }
+            for (let i = 0; i < left.length; i++) {
+                data.value.leftData += left[i] + '\n'
+            }
+            // console.log(cache)
+        })
+
     })
 
 })
@@ -85,7 +130,7 @@ onMounted(() => {
                 返回
             </el-button>
         </page-header>
-        <page-main >
+        <page-main>
             <el-row :gutter="8">
                 <el-col :span="12">
                     <el-collapse
@@ -95,11 +140,11 @@ onMounted(() => {
                         <el-collapse-item>
                             <template #title>
                                 <div class="title">
-                                    {{data.title.left}}
+                                    {{ data.title.left }}
                                 </div>
                             </template>
                             <el-scrollbar height="360px">
-                                <div class="content-text" v-html="data.leftData"/>
+                                <div class="content-text" v-html="data.leftData" />
                             </el-scrollbar>
                         </el-collapse-item>
                     </el-collapse>
@@ -111,14 +156,12 @@ onMounted(() => {
                         <el-collapse-item>
                             <template #title>
                                 <div class="title">
-                                    {{data.title.right}}
+                                    {{ data.title.right }}
                                 </div>
                             </template>
                             <el-scrollbar height="360px">
-                                <div class="content-text" v-html="data.rightData">
-                                </div>
+                                <div class="content-text" v-html="data.rightData" />
                             </el-scrollbar>
-
                         </el-collapse-item>
                     </el-collapse>
                 </el-col>

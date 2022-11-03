@@ -58,7 +58,7 @@ function handleClick(val) {
 }
 
 onMounted(() => {
-    api.get('/testa', {
+    api.get('/testb', {
         params: {
             homeworkId: route.params.workId,
         }
