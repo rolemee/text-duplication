@@ -14,61 +14,53 @@ const data = ref({
         left: 'l'
     },
     leftData: '',
-    rightData: ''
+    rightData: '',
+    left: {
+        start: 0,
+        end: 0
+    },
+    right: {
+        start: 0,
+        end: 0
+    }
 })
 const setKeyWord  = ref()
 
 onMounted(() => {
-    let  str = '#include<bits/stdc++.h>\n' +
-        'using namespace std;\n' +
-        'int main(){\n' +
-        '\tint n;\n' +
-        '\twhile(cin>>n){\n' +
-        '\t\tint a[1000]={},sum=0,max0=-1;\n' +
-        '\t\tfor(int i=0;i>n;i--){\n' +
-        '\t\t\tcin>>a[i];\n' +
-        '\t\t\tsum+=a[i];\n' +
-        '\t\t\tmax0=max(max0,a[i]);\n' +
-        '\t\t}\n' +
-        '\t\tsort(a,a+n);\n' +
-        '\t\tcout<<sum<<" "<<max0<<" ";\n' +
-        '\t\tfor(int i=n-1;i>=0;i--)\n' +
-        '\t\t\tcout<<a[i]<<" ";\n' +
-        '        for(int j=n-1;i>=0;i--)\n' +
-        '\t\t\tcout<<a[j]<<" ";\n' +
-        '\t\t\t        for(int j=n-1;i>=0;i--)\n' +
-        '\t\t\tcout<<a[j]<<" ";\n' +
-        '\t\t\t        for(int j=n-1;i>=0;i--)\n' +
-        '\t\t\tcout<<a[j]<<" ";\n' +
-        '\t\t\t        for(int j=n-1;i>=0;i--)\n' +
-        '\t\t\tcout<<a[j]<<" ";\n' +
-        '\t\tcout<<endl;\n' +
-        '\t}\n' +
-        '\treturn 0;\n' +
-        '}'
-    let cache = str.split('\n')
-    console.log(cache)
-    let t = []
-    for(let i =3 ; i<5; i++) {
-        str = str.replace(cache[i]+'\n', '')
-        cache[i] = `<span style="color:red">${cache[i]}</span>`
-        t.push(cache[i])
-        // console.log(cache[i])
-        // // console.log(str.replace("/"+cache[i]+"/g", `<span style="color:red">${cache[i]}</span>`))
+    api.get('/testd', {
+        params: {
+            homeworkId: route.params.homeworkId,
+            file1: route.params.rightName,
+            file2: route.params.leftName
+        }
+    }).then(res => {
+        data.value.left.start = res.data[0].start1
+        data.value.right.start = res.data[0].start2
+        data.value.left.end = res.data[0].end1
+        data.value.right.end = res.data[0].end2
+        // console.log(data.value.right)
+        api.get(`testc?filename=${route.params.leftName}`).then(res => {
+            let left = JSON.parse(JSON.stringify(res))
+            left = left.replace(eval("/"+'<'+"/g"), '&lt;')
+            let cache = left.split('\n')
+            for (let i = data.value.left.start-1; i < data.value.left.end; i++ ) {
+                left = left.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
+            }
+            data.value.leftData = left
+            // console.log(cache)
+        })
+        api.get(`testc?filename=${route.params.rightName}`).then(res => {
+            let right = JSON.parse(JSON.stringify(res))
+            right = right.replace(eval("/"+'<'+"/g"), '&lt;')
+            let cache = right.split('\n')
+            for (let i = data.value.right.start-1; i < data.value.right.end; i++ ) {
+                right = right.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
+            }
+            data.value.rightData = right
+            // console.log(cache)
+        })
+    })
 
-        // console.log(JSON.stringify(str))
-    }
-    // cache.join('\n')
-    // console.log(cache.join('\n'))
-    // console.log(str)
-    setKeyWord.value = t.join('\n')
-    data.value.leftData = str
-    // console.log(data.value.leftData)
-    // api.get('/testc?filename=1.cpp').then(res => {
-    //     data.value.leftData = res
-    //     let cache = JSON.stringify(res).split(/[\n]/)
-    //     console.log(cache)
-    // })
 })
 
 </script>
@@ -99,11 +91,7 @@ onMounted(() => {
                                 </div>
                             </template>
                             <el-scrollbar height="360px">
-                                <div class="content-text" v-html="setKeyWord">
-                                </div>
-                                <div class="content-text">
-                                    {{data.leftData}}
-                                </div>
+                                <div class="content-text" v-html="data.leftData"/>
                             </el-scrollbar>
                         </el-collapse-item>
                     </el-collapse>
@@ -119,8 +107,7 @@ onMounted(() => {
                                 </div>
                             </template>
                             <el-scrollbar height="360px">
-                                <div class="content-text">
-                                    {{data.leftData}}
+                                <div class="content-text" v-html="data.rightData">
                                 </div>
                             </el-scrollbar>
 
