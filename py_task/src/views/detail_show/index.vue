@@ -10,18 +10,18 @@ function goBack() {
 
 const data = ref({
     title: {
-        right: 'r',
-        left: 'l'
+        right: route.params.rightName,
+        left: route.params.leftName
     },
     leftData: '',
     rightData: '',
     left: {
-        start: 0,
-        end: 0
+        start: [],
+        end: []
     },
     right: {
-        start: 0,
-        end: 0
+        start: [],
+        end: []
     }
 })
 const setKeyWord  = ref()
@@ -34,17 +34,22 @@ onMounted(() => {
             file2: route.params.leftName
         }
     }).then(res => {
-        data.value.left.start = res.data[0].start1
-        data.value.right.start = res.data[0].start2
-        data.value.left.end = res.data[0].end1
-        data.value.right.end = res.data[0].end2
+        res.data.forEach(item => {
+            // console.log(item.start1)
+            data.value.left.start.push(item.start1)
+            data.value.right.start.push(item.start2)
+            data.value.left.end.push(item.end1)
+            data.value.right.end.push(item.end2)
+        })
         // console.log(data.value.right)
         api.get(`testc?filename=${route.params.leftName}`).then(res => {
             let left = JSON.parse(JSON.stringify(res))
             left = left.replace(eval("/"+'<'+"/g"), '&lt;')
             let cache = left.split('\n')
-            for (let i = data.value.left.start-1; i < data.value.left.end; i++ ) {
-                left = left.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
+            for (let j = 0; j < data.value.left.start.length; j++) {
+                for (let i = data.value.left.start[j]-1; i < data.value.left.end[j]; i++ ) {
+                    left = left.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
+                }
             }
             data.value.leftData = left
             // console.log(cache)
@@ -53,8 +58,11 @@ onMounted(() => {
             let right = JSON.parse(JSON.stringify(res))
             right = right.replace(eval("/"+'<'+"/g"), '&lt;')
             let cache = right.split('\n')
-            for (let i = data.value.right.start-1; i < data.value.right.end; i++ ) {
-                right = right.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
+            for (let j = 0; j < data.value.right.start.length; j++) {
+                // console.log(data.value.right.start[j])
+                for (let i = data.value.right.start[j]-1; i < data.value.right.end[j]; i++ ) {
+                    right = right.replace(cache[i], `<span style="color:red">${cache[i]}</span>`);
+                }
             }
             data.value.rightData = right
             // console.log(cache)
