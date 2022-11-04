@@ -8,7 +8,14 @@ dic = {
         'rights' : "0",
     },
 }
-def check_login(data, SECRET_KEY):
+def jwt_check(session,SECRET_KEY):
+    try:
+        return jwt.decode(session, SECRET_KEY, algorithms=['HS256'])['data']
+    except:
+        return {'account':'guest'}
+
+
+def login(data, SECRET_KEY):
     if data.get("account") and data.get("password"):
         sql = "select usernameId,password,a.rights,`describe` from python_homework.user a join rights r on r.rights = a.rights where usernameId = %s and password = %s"
         res = module.sql_query.sql_query(sql,[data.get("account"),data.get("password")])
@@ -24,6 +31,14 @@ def check_login(data, SECRET_KEY):
                 }
             })
         else:
-            return json.dumps({"error": "0"})
+            return json.dumps({
+                "status": 0,
+                "error": "账号或密码错误",
+                "data": {}
+            })
     else:
-        return "33"
+        return json.dumps({
+                "status": 0,
+                "error": "参数丢失",
+                "data": {}
+            })
