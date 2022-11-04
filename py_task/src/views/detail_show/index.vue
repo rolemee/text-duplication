@@ -87,6 +87,7 @@ onMounted(() => {
             let monacoInstance = monaco.editor.create(document.getElementById('right-monaco'), {
                 value: data.value.rightData,
                 language: 'c',
+                fontSize: 15,
                 readOnly: true
             })
 
@@ -126,6 +127,7 @@ onMounted(() => {
             let monacoInstance = monaco.editor.create(document.getElementById('left-monaco'), {
                 value: data.value.leftData,
                 language: 'c',
+                fontSize: 15,
                 readOnly: true
             })
 
@@ -151,7 +153,7 @@ onMounted(() => {
                     rules: [{ background: 'EDF9FA' }],
                     colors: {
                         'editor.foreground': '#000000',
-                        'editor.background': '#EDF9FA',
+                        'editor.background': '#ffffff',
                         'editorCursor.foreground': '#8B0000',
                         'editor.lineHighlightBackground': '#0000FF20',
                         'editorLineNumber.foreground': '#008800',
@@ -164,12 +166,14 @@ onMounted(() => {
                     value: leftDataDiff,
                     language: 'c',
                     readOnly: true,
+                    fontSize: 15,
                     theme:'myTheme'
                 })
                 let rightMonaco = monaco.editor.create(document.getElementById('right-monaco-list-' + i), {
                     value: rightDataDiff,
                     language: 'c',
                     readOnly: true,
+                    fontSize: 15,
                     theme: 'myTheme'
                 })
 

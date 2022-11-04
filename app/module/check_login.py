@@ -9,6 +9,7 @@ dic = {
     },
 }
 def jwt_check(session,SECRET_KEY):
+    print(jwt.decode(session, SECRET_KEY, algorithms=['HS256']))
     try:
         return jwt.decode(session, SECRET_KEY, algorithms=['HS256'])['data']
     except:
