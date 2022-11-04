@@ -9,19 +9,9 @@ function goBack() {
 }
 
 const data = ref({
+    loading: false,
     // 表格
-    tableData: [
-        {
-            'id1': 'cpp1',
-            'id2': 'cpp2',
-            'similarity': '0.8'
-        },
-        {
-            'id1': 'cpp1',
-            'id2': 'cpp2',
-            'similarity': '0.8'
-        }
-    ],
+    tableData: [],
     columns: [
         {
             prop: 'id1',
@@ -58,12 +48,16 @@ function handleClick(val) {
 }
 
 onMounted(() => {
+    data.value.loading = true
     api.get('/testb', {
         params: {
             homeworkId: route.params.workId,
         }
     }).then(res => {
         data.value.tableData = res.data
+        data.value.loading = false
+    }).catch(() => {
+        data.value.loading = false
     })
 })
 
@@ -81,7 +75,7 @@ onMounted(() => {
                 返回
             </el-button>
         </page-header>
-        <page-main >
+        <page-main v-loading="data.loading">
            <DetailTable
                :tableData="data.tableData"
                :columns="data.columns"

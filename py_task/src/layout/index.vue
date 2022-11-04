@@ -4,7 +4,6 @@ import MainSidebar from './components/MainSidebar/index.vue'
 import SubSidebar from './components/SubSidebar/index.vue'
 import Topbar from './components/Topbar/index.vue'
 import Search from './components/Search/index.vue'
-import AppSetting from './components/AppSetting/index.vue'
 import { isExternalLink } from '@/util'
 
 const { proxy } = getCurrentInstance()
@@ -97,7 +96,6 @@ function switchMenu(index) {
             <el-backtop :right="20" :bottom="20" title="回到顶部" />
         </div>
         <Search />
-        <AppSetting />
     </div>
 </template>
 

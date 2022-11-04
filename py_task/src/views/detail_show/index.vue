@@ -9,6 +9,7 @@ function goBack() {
 }
 
 const data = ref({
+    loading: false,
     title: {
         right: route.params.rightName,
         left: route.params.leftName
@@ -24,24 +25,75 @@ const data = ref({
         end: []
     },
     colors: [],
-    issame: 0,
-    colorlists: [
-        '#e6194B',
-        '#3cb44b',
-        '#ffe119',
-        '#4363d8',
-        '#f58231',
-        '#911eb4',
-        '#42d4f4',
-        '#f032e6',
-        '#bfef45',
-        '#fabed4',
+    colorLists: [
+        'rgba(230,25,75,0.8)',
+        'rgba(60,180,75,0.84)',
+        'rgba(255,225,25,0.8)',
+        'rgba(67,99,216,0.81)',
+        'rgba(245,130,49,0.82)',
+        'rgba(145,30,180,0.79)',
+        'rgba(66,212,244,0.8)',
+        'rgba(240,50,230,0.83)',
+        'rgba(191,239,69,0.81)',
+        'rgba(250,190,212,0.8)',
         'blueviolet'
     ]
 })
-const setKeyWord  = ref()
 
+function getData(res, side = 'left') {
+    let code = JSON.parse(JSON.stringify(res))
+    code = code.replace(eval('/' + '<' + '/g'), '&lt;')
+    code = code.replace(eval('/' + '>' + '/g'), '&gt;')
+    let cache = code.split('\n')
+    cache = cache.filter( s => {
+        return s && s.trim()
+    })
+    // console.log(cache)
+    code = JSON.parse(JSON.stringify(cache))
+    let beforeStart = []
+    let beforeEnd = []
+    let flag = false
+    let key = 0
+    for (let j = 0; j < data.value[side].start.length; j++) {
+        if (beforeEnd.indexOf(data.value[side].end[j]) !== -1 || beforeStart.indexOf(data.value[side].start[j]) !== -1) {
+            flag = true
+            ++key
+        } else {
+            beforeStart.push(data.value[side].start[j])
+            beforeEnd.push(data.value[side].end[j])
+            flag = false
+        }
+        // console.log(j)
+        for (let i = data.value[side].start[j] - 1; i < data.value[side].end[j]; i++) {
+            let sign
+            if (flag) {
+                console.log("key"+key)
+                sign = `<div style="background-color: ${data.value.colorLists[data.value.colors[j]]};width: 100%;height: 100%;"></div><div></div>`
+                code[i] = code[i].replace('<div></div>', `${sign}`)
+            }else {
+                let cacheData = cache[i]
+                cache[i] = `<div style="position: relative;float: left;z-index: 999 ">${cache[i]}</div>`
+                sign = `<span style="color: white;overflow: hidden"><div style="left:0" class="sign">${cache[i]}<div class="sign-content" style="display: flex">
+<div style="background-color: ${data.value.colorLists[data.value.colors[j]]};width: 100%;height: 100%;"></div><div></div></div></div></span>`
+                code[i] = code[i].replace(cacheData, `${sign}`)
+            }
+            console.log(sign)
+            // right[i] = right[i].replace(cache[i], `${sign}`)
+            // console.log(cache[i])
+            console.log(code[i])
+        }
+    }
+    let dataType = side === 'right' ? 'rightData' : 'leftData'
+    for (let i = 0; i < code.length; i++) {
+        if (code[i].indexOf('<span') !== -1) {
+            data.value[dataType] += code[i]
+        }else {
+            data.value[dataType] += code[i] + '\n'
+        }
+    }
+}
 onMounted(() => {
+    data.value.loading = true
     api.get('/testd', {
         params: {
             homeworkId: route.params.homeworkId,
@@ -61,57 +113,17 @@ onMounted(() => {
         })
         // console.log(data.value.right)
         api.get(`testc?filename=${route.params.rightName}`).then(res => {
-            let right = JSON.parse(JSON.stringify(res))
-            right = right.replace(eval('/' + '<' + '/g'), '&lt;')
-            right = right.replace(eval('/' + '<' + '/g'), '&gt;')
-            let cache = right.split('\n')
-            right = cache
-            for (let j = 0; j < data.value.right.start.length; j++) {
-                // console.log(data.value.right.start[j])
-                for (let i = data.value.right.start[j] - 1; i < data.value.right.end[j]; i++) {
-                    if (right[i].indexOf('style="color') !== -1) {
-                        continue
-                    }
-                    right[i] = right[i].replace(cache[i], `<span style="color: ${data.value.colorlists[data.value.colors[j]]}">${cache[i]}</span>`)
-                }
-            }
-            for (let i = 0; i < right.length; i++) {
-                data.value.rightData += right[i] + '\n'
-            }
-            // console.log(cache)
+            getData(res, 'right')
+            data.value.loading = false
+        }).catch(() => {
+            data.value.loading = false
         })
         api.get(`testc?filename=${route.params.leftName}`).then(res => {
-            let left = JSON.parse(JSON.stringify(res))
-            left = left.replace(eval('/' + '<' + '/g'), '&lt;')
-            left = left.replace(eval('/' + '>' + '/g'), '&gt;')
-
-            let cache = left.split('\n')
-            left = left.split('\n')
-            console.log(data.value.left.start)
-            console.log(data.value.left.end)
-            console.log(left)
-            console.log(cache)
-            let before_start = '0'
-            let before_end = '0'
-            let flag = -1
-            for (let j = 0; j < data.value.left.start.length; j++) {
-                if (before_end === data.value.right.end[j] && before_start === data.value.right.start[j]) {
-                    console.log(1)
-                } else {
-                    before_start = data.value.right.start[j]
-                    before_end = data.value.right.end[j]
-                    flag++
-                }
-                for (let i = data.value.left.start[j] - 1; i < data.value.left.end[j]; i++) {
-                    left[i] = left[i].replace(cache[i], `<span style="color: ${data.value.colorlists[data.value.colors[flag]]}">${cache[i]}</span>`)
-                }
-            }
-            for (let i = 0; i < left.length; i++) {
-                data.value.leftData += left[i] + '\n'
-            }
-            // console.log(cache)
+            getData(res,'left')
+            data.value.loading = false
+        }).catch(() => {
+            data.value.loading = false
         })
-
     })
 
 })
@@ -130,7 +142,7 @@ onMounted(() => {
                 返回
             </el-button>
         </page-header>
-        <page-main>
+        <page-main v-loading="data.loading">
             <el-row :gutter="8">
                 <el-col :span="12">
                     <el-collapse
@@ -166,6 +178,15 @@ onMounted(() => {
                     </el-collapse>
                 </el-col>
             </el-row>
+<!--            <span style="color: black;width: 400px;height: 25px;background-color: greenyellow">-->
+<!--                <div style="position: relative; top:0;background-color: cyan;z-index: 1;width: 100%;height: 25px;overflow: hidden;">-->
+<!--                    <div style="z-index:999;float: left;position: relative" class="T">    for(int j=n-1;i&gt;=0;i&#45;&#45;)</div>-->
+<!--                    <div style="position: absolute;top: 0; display: flex;width: 100%;height: 100%;">-->
+<!--                        <div style="box-shadow: 0 0 5px 20px blueviolet;width: 100%;height: 100%;z-index: 1"/>-->
+<!--                        <div style="background-color: violet;width: 100%;height: 100%;z-index: 1"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </span>-->
         </page-main>
     </div>
 </template>
@@ -203,5 +224,20 @@ onMounted(() => {
 :deep(.title) {
     margin-left: 15px;
 }
-
+:deep(.sign) {
+    width: 100%;
+    height: 25px;
+    position: relative;
+    top: 0;
+    overflow: hidden;
+    z-index: 1;
+    .sign-content {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top:0;
+        //filter: blur(1px);
+        //clear:both;
+    }
+}
 </style>
