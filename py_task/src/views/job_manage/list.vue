@@ -65,8 +65,9 @@ const data = ref({
         type: '',
         id: '',
         uploadData: {
-            token: {
-                'token': userStore.token || ''
+            data: {
+                'token': userStore.token || '',
+                homeworkId: '1'
             }
         }
     },
@@ -169,7 +170,7 @@ function getDataList() {}
             :type="data.formModeProps.type"
             :disabled="data.formModeProps.disabled"
             :data="data.formModeProps.data"
-            :uploadData="data.formModeProps.uploadData.token"
+            :uploadData="data.formModeProps.uploadData.data"
             v-model="data.formModeProps.visible"
             :mode="data.formMode"
             @success="getDataList"

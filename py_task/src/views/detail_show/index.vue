@@ -1,21 +1,24 @@
 <script setup name="DetailShow">
 import api from '@/api/index'
-
+import 'monaco-editor/esm/vs/basic-languages/monaco.contribution'
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js'
 const route = useRoute()
 const router = useRouter()
-
+const activeNamesList = ref([])
+const activeNames = ref(['1'])
 function goBack() {
     router.push({ name: 'taskManageList' })
 }
 
 const data = ref({
-    loading: false,
     title: {
         right: route.params.rightName,
         left: route.params.leftName
     },
     leftData: '',
     rightData: '',
+    leftDataList: [],
+    rightDataList: [],
     left: {
         start: [],
         end: []
@@ -25,75 +28,23 @@ const data = ref({
         end: []
     },
     colors: [],
-    colorLists: [
-        'rgba(230,25,75,0.8)',
-        'rgba(60,180,75,0.84)',
-        'rgba(255,225,25,0.8)',
-        'rgba(67,99,216,0.81)',
-        'rgba(245,130,49,0.82)',
-        'rgba(145,30,180,0.79)',
-        'rgba(66,212,244,0.8)',
-        'rgba(240,50,230,0.83)',
-        'rgba(191,239,69,0.81)',
-        'rgba(250,190,212,0.8)',
+    issame: 0,
+    colorlists: [
+        '#e6194B',
+        '#3cb44b',
+        '#ffe119',
+        '#4363d8',
+        '#f58231',
+        '#911eb4',
+        '#42d4f4',
+        '#f032e6',
+        '#bfef45',
+        '#fabed4',
         'blueviolet'
     ]
 })
 
-function getData(res, side = 'left') {
-    let code = JSON.parse(JSON.stringify(res))
-    code = code.replace(eval('/' + '<' + '/g'), '&lt;')
-    code = code.replace(eval('/' + '>' + '/g'), '&gt;')
-    let cache = code.split('\n')
-    cache = cache.filter( s => {
-        return s && s.trim()
-    })
-    // console.log(cache)
-    code = JSON.parse(JSON.stringify(cache))
-    let beforeStart = []
-    let beforeEnd = []
-    let flag = false
-    let key = 0
-    for (let j = 0; j < data.value[side].start.length; j++) {
-        if (beforeEnd.indexOf(data.value[side].end[j]) !== -1 || beforeStart.indexOf(data.value[side].start[j]) !== -1) {
-            flag = true
-            ++key
-        } else {
-            beforeStart.push(data.value[side].start[j])
-            beforeEnd.push(data.value[side].end[j])
-            flag = false
-        }
-        // console.log(j)
-        for (let i = data.value[side].start[j] - 1; i < data.value[side].end[j]; i++) {
-            let sign
-            if (flag) {
-                console.log("key"+key)
-                sign = `<div style="background-color: ${data.value.colorLists[data.value.colors[j]]};width: 100%;height: 100%;"></div><div></div>`
-                code[i] = code[i].replace('<div></div>', `${sign}`)
-            }else {
-                let cacheData = cache[i]
-                cache[i] = `<div style="position: relative;float: left;z-index: 999 ">${cache[i]}</div>`
-                sign = `<span style="color: white;overflow: hidden"><div style="left:0" class="sign">${cache[i]}<div class="sign-content" style="display: flex">
-<div style="background-color: ${data.value.colorLists[data.value.colors[j]]};width: 100%;height: 100%;"></div><div></div></div></div></span>`
-                code[i] = code[i].replace(cacheData, `${sign}`)
-            }
-            console.log(sign)
-            // right[i] = right[i].replace(cache[i], `${sign}`)
-            // console.log(cache[i])
-            console.log(code[i])
-        }
-    }
-    let dataType = side === 'right' ? 'rightData' : 'leftData'
-    for (let i = 0; i < code.length; i++) {
-        if (code[i].indexOf('<span') !== -1) {
-            data.value[dataType] += code[i]
-        }else {
-            data.value[dataType] += code[i] + '\n'
-        }
-    }
-}
 onMounted(() => {
-    data.value.loading = true
     api.get('/testd', {
         params: {
             homeworkId: route.params.homeworkId,
@@ -109,23 +60,145 @@ onMounted(() => {
             data.value.left.end.push(item.end1)
             data.value.right.end.push(item.end2)
             data.value.colors.push(tmp)
+            activeNamesList.value.push(tmp)
             tmp++
         })
         // console.log(data.value.right)
         api.get(`testc?filename=${route.params.rightName}`).then(res => {
-            getData(res, 'right')
-            data.value.loading = false
-        }).catch(() => {
-            data.value.loading = false
+            let right = JSON.parse(JSON.stringify(res))
+            // right = right.replace(eval('/' + '<' + '/g'), '&lt;')
+            // right = right.replace(eval('/' + '<' + '/g'), '&gt;')
+            let cache = right.split('\n')
+            right = cache
+            data.value.rightDataList.push(cache)
+            for (let j = 0; j < data.value.right.start.length; j++) {
+                // console.log(data.value.right.start[j])
+                for (let i = data.value.right.start[j] - 1; i < data.value.right.end[j]; i++) {
+                    if (right[i].indexOf('style="color') !== -1) {
+                        continue
+                    }
+                    // right[i] = right[i].replace(cache[i], `<span style="color: ${data.value.colorlists[data.value.colors[j]]}">${cache[i]}</span>`)
+                }
+            }
+            for (let i = 0; i < right.length; i++) {
+                data.value.rightData += right[i] + '\n'
+            }
+            let setKeyWord  = ref()
+            let monacoInstance = monaco.editor.create(document.getElementById('right-monaco'), {
+                value: data.value.rightData,
+                language: 'c',
+                fontSize: 15,
+                readOnly: true
+            })
+
+            // console.log(cache)
         })
         api.get(`testc?filename=${route.params.leftName}`).then(res => {
-            getData(res,'left')
-            data.value.loading = false
-        }).catch(() => {
-            data.value.loading = false
-        })
-    })
+            let left = JSON.parse(JSON.stringify(res))
+            // left = left.replace(eval('/' + '<' + '/g'), '&lt;')
+            // left = left.replace(eval('/' + '>' + '/g'), '&gt;')
 
+            let cache = left.split('\n')
+            left = left.split('\n')
+            data.value.leftDataList.push(left)
+            console.log(data.value.left.start)
+            console.log(data.value.left.end)
+            console.log(left)
+            console.log(cache)
+            let before_start = '0'
+            let before_end = '0'
+            let flag = -1
+            for (let j = 0; j < data.value.left.start.length; j++) {
+                if (before_end === data.value.right.end[j] && before_start === data.value.right.start[j]) {
+                    console.log(1)
+                } else {
+                    before_start = data.value.right.start[j]
+                    before_end = data.value.right.end[j]
+                    flag++
+                }
+                for (let i = data.value.left.start[j] - 1; i < data.value.left.end[j]; i++) {
+                    // left[i] = left[i].replace(cache[i], `<span style="color: ${data.value.colorlists[data.value.colors[flag]]}">${cache[i]}</span>`)
+                }
+            }
+            for (let i = 0; i < left.length; i++) {
+                data.value.leftData += left[i] + '\n'
+            }
+            let setKeyWord  = ref()
+            let monacoInstance = monaco.editor.create(document.getElementById('left-monaco'), {
+                value: data.value.leftData,
+                language: 'c',
+                fontSize: 15,
+                readOnly: true
+            })
+
+            // console.log(cache)
+        })
+        setTimeout(() => {
+
+            for (let i = 0; i < data.value.left.start.length; i++) {
+                let leftDataDiff = ''
+                let rightDataDiff = ''
+                for (let j = data.value.left.start[i] - 1; j < data.value.left.end[i]; j++) {
+                    // eslint-disable-next-line no-unused-vars
+                    leftDataDiff += j + 1 + ': ' + data.value.leftDataList[0][j] + '\n'
+                }
+                for (let j = data.value.right.start[i] - 1; j < data.value.right.end[i]; j++){
+                    rightDataDiff += j + 1 + ': ' + data.value.rightDataList[0][j] + '\n'
+                }
+                console.log(rightDataDiff)
+                console.log(leftDataDiff)
+                monaco.editor.defineTheme('myTheme', {
+                    base: 'vs',
+                    inherit: true,
+                    rules: [{ background: 'EDF9FA' }],
+                    colors: {
+                        'editor.foreground': '#000000',
+                        'editor.background': '#ffffff',
+                        'editorCursor.foreground': '#8B0000',
+                        'editor.lineHighlightBackground': '#0000FF20',
+                        'editorLineNumber.foreground': '#008800',
+                        'editor.selectionBackground': '#88000030',
+                        'editor.inactiveSelectionBackground': '#88000015'
+                    }
+                });
+
+                let leftMonaco = monaco.editor.create(document.getElementById('left-monaco-list-' + i), {
+                    value: leftDataDiff,
+                    language: 'c',
+                    readOnly: true,
+                    fontSize: 15,
+                    theme:'myTheme'
+                })
+                let rightMonaco = monaco.editor.create(document.getElementById('right-monaco-list-' + i), {
+                    value: rightDataDiff,
+                    language: 'c',
+                    readOnly: true,
+                    fontSize: 15,
+                    theme: 'myTheme'
+                })
+
+                // let originalModel = monaco.editor.createModel(
+                //     leftDataDiff,
+                //     'cpp'
+                // )
+                // let modifiedModel = monaco.editor.createModel(
+                //     rightDataDiff,
+                //     'cpp'
+                // )
+                // console.log('left-monaco-list-' + i)
+                // console.log(document.getElementById('left-monaco-list-' + i))
+                // let diffEditor = monaco.editor.createDiffEditor(document.getElementById('left-monaco-list-' + i), {
+                //     // You can optionally disable the resizing
+                //     enableSplitViewResizing: false
+                // })
+                // diffEditor.setModel({
+                //     original: originalModel,
+                //     modified: modifiedModel
+                // })
+            }
+        }, 1000)
+
+    })
 })
 
 </script>
@@ -142,51 +215,75 @@ onMounted(() => {
                 返回
             </el-button>
         </page-header>
-        <page-main v-loading="data.loading">
+        <page-main>
             <el-row :gutter="8">
                 <el-col :span="12">
                     <el-collapse
+                        v-model="activeNames "
                         class="file file-left"
                         accordion
                     >
-                        <el-collapse-item>
+                        <el-collapse-item name="1">
                             <template #title>
                                 <div class="title">
                                     {{ data.title.left }}
                                 </div>
                             </template>
-                            <el-scrollbar height="360px">
-                                <div class="content-text" v-html="data.leftData" />
-                            </el-scrollbar>
+                            <div id="left-monaco" style="height: 360px" />
                         </el-collapse-item>
                     </el-collapse>
                 </el-col>
                 <el-col :span="12">
                     <el-collapse
+                        v-model="activeNames"
                         class="file file-right"
                     >
-                        <el-collapse-item>
+                        <el-collapse-item name="1">
                             <template #title>
                                 <div class="title">
                                     {{ data.title.right }}
                                 </div>
                             </template>
-                            <el-scrollbar height="360px">
-                                <div class="content-text" v-html="data.rightData" />
-                            </el-scrollbar>
+                            <div id="right-monaco" style="height: 360px" />
                         </el-collapse-item>
                     </el-collapse>
                 </el-col>
             </el-row>
-<!--            <span style="color: black;width: 400px;height: 25px;background-color: greenyellow">-->
-<!--                <div style="position: relative; top:0;background-color: cyan;z-index: 1;width: 100%;height: 25px;overflow: hidden;">-->
-<!--                    <div style="z-index:999;float: left;position: relative" class="T">    for(int j=n-1;i&gt;=0;i&#45;&#45;)</div>-->
-<!--                    <div style="position: absolute;top: 0; display: flex;width: 100%;height: 100%;">-->
-<!--                        <div style="box-shadow: 0 0 5px 20px blueviolet;width: 100%;height: 100%;z-index: 1"/>-->
-<!--                        <div style="background-color: violet;width: 100%;height: 100%;z-index: 1"></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </span>-->
+        </page-main>
+        <page-main v-for="(item, index) in data.left.start.length">
+            <el-row :gutter="8">
+                <el-col :span="12">
+                    <el-collapse
+                        v-model="activeNamesList"
+                        class="file file-left"
+                        accordion
+                    >
+                        <el-collapse-item :name="index">
+                            <template #title>
+                                <div class="title">
+                                    {{ data.title.left }} ：第 {{ data.left.start[index] }} - {{ data.left.end[index] }} 行
+                                </div>
+                            </template>
+                            <div :id="'left-monaco-list-' + index" style="height: 360px" />
+                        </el-collapse-item>
+                    </el-collapse>
+                </el-col>
+                <el-col :span="12">
+                    <el-collapse
+                        v-model="activeNamesList"
+                        class="file file-right"
+                    >
+                        <el-collapse-item :name="index">
+                            <template #title>
+                                <div class="title">
+                                    {{ data.title.right }} ：第 {{ data.right.start[index] }} - {{ data.right.end[index] }} 行
+                                </div>
+                            </template>
+                            <div :id="'right-monaco-list-' + index" style="height: 360px" />
+                        </el-collapse-item>
+                    </el-collapse>
+                </el-col>
+            </el-row>
         </page-main>
     </div>
 </template>
@@ -224,20 +321,5 @@ onMounted(() => {
 :deep(.title) {
     margin-left: 15px;
 }
-:deep(.sign) {
-    width: 100%;
-    height: 25px;
-    position: relative;
-    top: 0;
-    overflow: hidden;
-    z-index: 1;
-    .sign-content {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top:0;
-        //filter: blur(1px);
-        //clear:both;
-    }
-}
+
 </style>

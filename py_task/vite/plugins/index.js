@@ -7,7 +7,6 @@ import createAutoImport from './auto-import'
 import createComponents from './components'
 import createSetupExtend from './setup-extend'
 import createSvgIcon from './svg-icon'
-import createMock from './mock'
 import createLayouts from './layouts'
 import createPages from './pages'
 import createCompression from './compression'
@@ -23,7 +22,6 @@ export default function createVitePlugins(viteEnv, isBuild = false) {
     vitePlugins.push(createComponents(isBuild))
     vitePlugins.push(createSetupExtend())
     vitePlugins.push(createSvgIcon(isBuild))
-    vitePlugins.push(createMock(viteEnv, isBuild))
     vitePlugins.push(createLayouts())
     vitePlugins.push(createPages())
     isBuild && vitePlugins.push(...createCompression(viteEnv))

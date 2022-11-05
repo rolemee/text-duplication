@@ -51,7 +51,7 @@ let detailForm = {
             {
                 label: '提交',
                 type: 'upload',
-                uploadUrl: 'http://127.0.0.1:9090/a'
+                uploadUrl: 'http://121.5.161.87:8888/upload'
             }
         ]
     }

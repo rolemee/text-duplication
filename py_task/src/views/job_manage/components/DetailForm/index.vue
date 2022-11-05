@@ -24,10 +24,14 @@
                     <template v-else-if="item.type === 'upload'">
                         <el-upload
                             drag
+                            ref="fileList"
                             :action="item.uploadUrl"
                             :data="props.uploadData"
+                            :file-list="data.fileList"
                             class="upload"
                             :on-success="onSuccess"
+                            :before-upload="beforeUpload"
+                            :on-change="handleChange"
                         >
                             <el-button type="primary" text>
                                 上传文件
@@ -74,12 +78,19 @@ const props = defineProps({
     uploadData: {
         type: Object,
         default: {}
+    },
+    ext: {
+        type: Array,
+        default: ['txt', 'c', 'cpp', 'java', 'py', 'word']
     }
 })
 
+const fileList = ref()
 const data = ref({
     loading: false,
     form: {},
+    fileList: [],
+    cacheFile: []
 })
 const myVisible = ref(false)
 
@@ -106,26 +117,49 @@ function getForm(){//通过id获取数据
             name: 'ctf'
         }
     }
-    // props.data.map(item => {
-    //     data.value.form[item.name]= '';
-    //     if(item.hasOwnProperty('submitTime')){
-    //         data.value.submitTime = new Date(item.submitTime*1000)
-    //         delete data.value.form[item.name]
-    //     }
-    //     if(item.hasOwnProperty('type'))
-    //         delete data.value.form[item.name]
-    // })
-}
-function onSuccess() {
-    console.log("上传成功")
 }
 
-defineExpose({
-    submit(callback){
-        console.log("提交")
-        callback && callback()
+// //上传操作
+// import api from '@/api/index'
+// function handleUpload(file) {
+//     console.log(file)
+//     console.log(file.action)
+//     api.post(file.action, {
+//         file: file.file
+//     }).then(res => {
+//         console.log(res)
+//     })
+// }
+
+function onSuccess(res) {
+    if (res.error !== '') {
+        ElMessage.error(res.error)
+        if (Object.keys(data.value.cacheFile).length !== 0)
+            data.value.fileList = JSON.parse(JSON.stringify(data.value.cacheFile))
+        else
+            data.value.fileList = []
+    }else {
+        ElMessage.success("上传成功")
     }
-})
+}
+
+function beforeUpload(file) {
+    console.log(file.name.split('.'))
+    const fileName = file.name.split('.')
+    const fileExt = fileName[fileName.length - 1]
+    const isTypeOk = props.ext.indexOf(fileExt) !== -1
+    if (!isTypeOk) {
+        ElMessage.error(`文件上传只支持${ props.ext.join('/') }格式`)
+        data.value.fileList.pop()
+    }
+}
+
+function handleChange(file,fileList) {
+    if (fileList.length > 1) {
+        data.value.cacheFile = [fileList[0]]
+        data.value.fileList = [file]
+    }
+}
 </script>
 
 <style lang="scss" scoped>

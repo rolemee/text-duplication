@@ -17,7 +17,7 @@ const settingsStore = useSettingsStore()
 import useUserStore from '@/store/modules/user'
 const userStore = useUserStore()
 
-const banner = new URL('../assets/images/login-banner.png', import.meta.url).href
+// const banner = new URL('../assets/images/login-banner.png', import.meta.url).href
 const title = import.meta.env.VITE_APP_TITLE
 
 // 表单类型，login 登录，reset 重置密码
@@ -26,8 +26,7 @@ const formType = ref('login')
 // 登录
 const loginForm = ref({
     account: localStorage.login_account || '',
-    password: '',
-    remember: !!localStorage.login_account
+    password: ''
 })
 const loginRules = ref({
     account: [
@@ -35,7 +34,6 @@ const loginRules = ref({
     ],
     password: [
         { required: true, trigger: 'blur', message: '请输入密码' },
-        { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' }
     ]
 })
 
@@ -46,11 +44,6 @@ function handleLogin() {
             loading.value = true
             userStore.login(loginForm.value).then(() => {
                 loading.value = false
-                if (loginForm.value.remember) {
-                    localStorage.setItem('login_account', loginForm.value.account)
-                } else {
-                    localStorage.removeItem('login_account')
-                }
                 router.push(redirect.value)
             }).catch(() => {
                 loading.value = false
@@ -80,11 +73,11 @@ function showPassword() {
     <div>
         <div class="bg-banner" />
         <div id="login-box">
-            <div class="login-banner">
-                <div class="logo" />
-                <img :src="banner" class="banner">
-            </div>
-            <el-form v-show="formType == 'login'" ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on">
+<!--            <div class="login-banner">-->
+<!--                <div class="logo" />-->
+<!--                <img :src="banner" class="banner">-->
+<!--            </div>-->
+            <el-form v-show="formType === 'login'" ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on">
                 <div class="title-container">
                     <h3 class="title">欢迎来到 {{ title }} ! 👋🏻</h3>
                 </div>
@@ -133,20 +126,20 @@ function showPassword() {
         justify-content: start;
         border-radius: 0;
         box-shadow: none;
-        .login-banner {
-            width: 100%;
-            padding: 20px 0;
-            .banner {
-                position: relative;
-                right: inherit;
-                width: 100%;
-                max-width: 375px;
-                margin: 0 auto;
-                display: inherit;
-                top: inherit;
-                transform: translateY(0);
-            }
-        }
+        //.login-banner {
+        //    width: 100%;
+        //    padding: 20px 0;
+        //    .banner {
+        //        position: relative;
+        //        right: inherit;
+        //        width: 100%;
+        //        max-width: 375px;
+        //        margin: 0 auto;
+        //        display: inherit;
+        //        top: inherit;
+        //        transform: translateY(0);
+        //    }
+        //}
         .login-form {
             width: 100%;
             min-height: auto;
@@ -167,7 +160,10 @@ function showPassword() {
     z-index: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, var(--el-fill-color-lighter), var(--el-bg-color-page));
+    background: url('./src/assets/images/background-image.jpg') no-repeat center center;
+    background-size: cover;
+    //background-position: center center;
+    //background: radial-gradient(circle at center, var(--el-fill-color-lighter), var(--el-bg-color-page));
 }
 #login-box {
     display: flex;
@@ -177,30 +173,31 @@ function showPassword() {
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     background-color: var(--el-bg-color);
+    opacity: 0.8;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--el-box-shadow);
-    .login-banner {
-        position: relative;
-        width: 450px;
-        background-color: var(--el-fill-color-light);
-        overflow: hidden;
-        .banner {
-            width: 100%;
-            @include position-center(y);
-        }
-        .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 30px;
-            height: 30px;
-            border-radius: 4px;
-            background: url("../assets/images/logo.png") no-repeat;
-            background-size: contain;
-            box-shadow: var(--el-box-shadow-light);
-        }
-    }
+    //.login-banner {
+    //    position: relative;
+    //    width: 450px;
+    //    background-color: var(--el-fill-color-light);
+    //    overflow: hidden;
+    //    .banner {
+    //        width: 100%;
+    //        @include position-center(y);
+    //    }
+    //    .logo {
+    //        position: absolute;
+    //        top: 20px;
+    //        left: 20px;
+    //        width: 30px;
+    //        height: 30px;
+    //        border-radius: 4px;
+    //        background: url("../assets/images/logo.png") no-repeat;
+    //        background-size: contain;
+    //        box-shadow: var(--el-box-shadow-light);
+    //    }
+    //}
     .login-form {
         display: flex;
         flex-direction: column;
@@ -239,23 +236,6 @@ function showPassword() {
             .el-input__suffix {
                 right: 10px;
             }
-        }
-    }
-    .flex-bar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
-    .sub-link {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 20px;
-        font-size: 14px;
-        color: var(--el-text-color-secondary);
-        .text {
-            margin-right: 10px;
         }
     }
 }

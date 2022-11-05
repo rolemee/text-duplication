@@ -14,12 +14,12 @@ const useUserStore = defineStore(
         }),
         getters: {
             isLogin: state => {
-                // let retn = false
-                // if (state.token) {
-                //     retn = true
-                // }
-                // return retn
-                return true
+                let retn = false
+                if (state.token) {
+                    retn = true
+                }
+                return retn
+                // return true
             }
         },
         actions: {
@@ -30,7 +30,7 @@ const useUserStore = defineStore(
                         localStorage.setItem('account', res.data.account)
                         localStorage.setItem('token', res.data.session)
                         this.account = res.data.account
-                        this.token = res.data.token
+                        this.token = res.data.session
                         resolve()
                     }).catch(error => {
                         reject(error)
