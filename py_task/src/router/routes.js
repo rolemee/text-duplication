@@ -120,16 +120,9 @@ import StudentJobManage from './modules/student.job.manage'
 let asyncRoutes = [
     {
         meta: {
-            title: '演示',
-            icon: 'sidebar-default'
-        },
-        children: [
-        ]
-    },
-    {
-        meta: {
             title: '作业管理',
-            icon: 'ep:compass'
+            icon: 'ep:compass',
+            auth: [0]
         },
         children: [
             JobManage
@@ -138,7 +131,8 @@ let asyncRoutes = [
     {
         meta: {
             title: '学生作业管理',
-            icon: 'ep:compass'
+            icon: 'ep:compass',
+            auth: [1]
         },
         children: [
             StudentJobManage
@@ -146,17 +140,6 @@ let asyncRoutes = [
     }
 ]
 
-import { setupLayouts } from 'virtual:generated-layouts'
-import generatedRoutes from 'virtual:generated-pages'
-
-if (useSettingsStore(pinia).app.routeBaseOn === 'filesystem') {
-    constantRoutes = generatedRoutes.filter(item => {
-        return item.meta?.enabled !== false && item.meta?.constant === true
-    })
-    asyncRoutes = setupLayouts(generatedRoutes.filter(item => {
-        return item.meta?.enabled !== false && item.meta?.constant !== true && item.meta?.layout !== false
-    }))
-}
 
 export {
     constantRoutes,

@@ -7,6 +7,7 @@ import useUserStore from './user'
 
 function hasPermission(permissions, route) {
     let isAuth = false
+    // console.log(permissions)
     if (route.meta && route.meta.auth) {
         isAuth = permissions.some(auth => {
             if (typeof route.meta.auth == 'string') {
@@ -28,33 +29,10 @@ function filterAsyncRoutes(routes, permissions) {
     routes.forEach(route => {
         let tmpRoute = deepClone(route)
         if (hasPermission(permissions, tmpRoute)) {
-            if (tmpRoute.children) {
-                tmpRoute.children = filterAsyncRoutes(tmpRoute.children, permissions)
-                tmpRoute.children.length && res.push(tmpRoute)
-            } else {
-                res.push(tmpRoute)
-            }
+            res.push(tmpRoute)
         }
     })
     return res
-}
-
-function formatBackRoutes(routes, views = import.meta.glob('../../views/**/*.vue')) {
-    return routes.map(route => {
-        switch (route.component) {
-            case 'Layout':
-                route.component = () => import('@/layout/index.vue')
-                break
-            default:
-                if (route.component) {
-                    route.component = views[`../../views/${route.component}`]
-                }
-        }
-        if (route.children) {
-            route.children = formatBackRoutes(route.children, views)
-        }
-        return route
-    })
 }
 
 // 将多层嵌套路由处理成两层，保留顶层和最子层路由，中间层级将被拍平
@@ -158,58 +136,16 @@ const useRouteStore = defineStore(
                     let accessedRoutes
                     // 如果权限功能开启，则需要对路由数据进行筛选过滤
                     if (settingsStore.app.enablePermission) {
-                        const permissions = await userStore.getPermissions()
+                        // console.log("get"+JSON.stringify(userStore.permissions))
+                        const permissions = await userStore.getPermission()
+                        // console.log("get"+JSON.stringify(permissions))
                         accessedRoutes = filterAsyncRoutes(asyncRoutes, permissions)
                     } else {
                         accessedRoutes = deepClone(asyncRoutes)
                     }
                     // 设置 routes 数据
                     this.isGenerate = true
-                    this.routes = accessedRoutes.filter(item => item.children.length != 0)
-                    resolve()
-                })
-            },
-            // 根据权限动态生成路由（后端获取）
-            generateRoutesAtBack() {
-                return new Promise(resolve => {
-                    api.get('route/list', {
-                        baseURL: '/mock/'
-                    }).then(async res => {
-                        const settingsStore = useSettingsStore()
-                        const userStore = useUserStore()
-                        let asyncRoutes = formatBackRoutes(res.data)
-                        let accessedRoutes
-                        // 如果权限功能开启，则需要对路由数据进行筛选过滤
-                        if (settingsStore.app.enablePermission) {
-                            const permissions = await userStore.getPermissions()
-                            accessedRoutes = filterAsyncRoutes(asyncRoutes, permissions)
-                        } else {
-                            accessedRoutes = deepClone(asyncRoutes)
-                        }
-                        // 设置 routes 数据
-                        this.isGenerate = true
-                        this.routes = accessedRoutes.filter(item => item.children.length != 0)
-                        resolve()
-                    })
-                })
-            },
-            // 根据权限动态生成路由（文件系统生成）
-            generateRoutesAtFilesystem(asyncRoutes) {
-                // eslint-disable-next-line no-async-promise-executor
-                return new Promise(async resolve => {
-                    const settingsStore = useSettingsStore()
-                    const userStore = useUserStore()
-                    let accessedRoutes
-                    // 如果权限功能开启，则需要对路由数据进行筛选过滤
-                    if (settingsStore.app.enablePermission) {
-                        const permissions = await userStore.getPermissions()
-                        accessedRoutes = filterAsyncRoutes(asyncRoutes, permissions)
-                    } else {
-                        accessedRoutes = deepClone(asyncRoutes)
-                    }
-                    // 设置 routes 数据
-                    this.isGenerate = true
-                    this.routes = accessedRoutes.filter(item => item.children.length != 0)
+                    this.routes = accessedRoutes.filter(item => item.children.length !== 0)
                     resolve()
                 })
             },

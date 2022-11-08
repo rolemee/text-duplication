@@ -9,6 +9,7 @@ const useUserStore = defineStore(
     {
         state: () => ({
             account: localStorage.account || '',
+            userId: localStorage.userId || '',
             token: localStorage.token || '',
             permissions: []
         }),
@@ -27,11 +28,17 @@ const useUserStore = defineStore(
                 return new Promise((resolve, reject) => {
                     api.post('/login', data).then(res => {
                         document.cookie = 'session=' + res.data.session
-                        localStorage.setItem('account', res.data.account)
-                        localStorage.setItem('token', res.data.session)
-                        this.account = res.data.account
                         this.token = res.data.session
-                        resolve()
+                        this.userId = data.account
+                        localStorage.setItem('userId' , data.account)
+                        localStorage.setItem('token', res.data.session)
+                        api.post('/userInfo', {
+                            usernameId: data.account
+                        }).then(res => {
+                            localStorage.setItem('account', res.data.name)
+                            this.account = res.data.name
+                            resolve()
+                        })
                     }).catch(error => {
                         reject(error)
                     })
@@ -45,25 +52,26 @@ const useUserStore = defineStore(
                     localStorage.removeItem('token')
                     this.account = ''
                     this.token = ''
+                    this.userId = ''
+                    this.permissions = []
                     routeStore.removeRoutes()
                     menuStore.setActived(0)
                     resolve()
                 })
             },
-            // 获取我的权限
-            getPermissions() {
-                return new Promise(resolve => {
-                    // 通过 mock 获取权限
-                    api.get('member/permission', {
-                        baseURL: '/mock/',
-                        params: {
-                            account: this.account
-                        }
+            getPermission() {
+                return new Promise((resolve, reject) => {
+                    api.post('/userInfo', {
+                        usernameId: this.userId
                     }).then(res => {
-                        this.permissions = res.data.permissions
-                        resolve(res.data.permissions)
+                        // console.log(res)
+                        this.permissions.push(res.data.rights)
+                        resolve(this.permissions)
+                    }).catch(error => {
+                        reject(error)
                     })
                 })
+
             }
         }
     }

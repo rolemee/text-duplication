@@ -26,6 +26,7 @@
         "js-cookie": "^3.0.1",
         "mitt": "^3.0.0",
         "mockjs": "^1.1.0",
+        "monaco-editor": "^0.34.1",
         "nprogress": "^0.2.0",
         "path-browserify": "^1.0.1",
         "path-to-regexp": "^6.2.1",

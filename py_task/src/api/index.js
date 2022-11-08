@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import qs from 'qs'
+import qs from 'qs'
 import router from '@/router/index'
 import { ElMessage } from 'element-plus'
 import useUserStore from '@/store/modules/user'
@@ -25,14 +25,14 @@ api.interceptors.request.use(
     request => {
         const userStore = useUserStore()
 
-        if (userStore.isLogin) {
-            request.headers['Token'] = userStore.token
-        }
+        // if (userStore.isLogin) {
+        //     request.headers['Token'] = userStore.token
+        // }
         // 是否将 POST 请求参数进行字符串化处理
-        if (request.method === 'post') {
-            // request.data = qs.stringify(request.data, {
-            //     arrayFormat: 'brackets'
-            // })
+        if (request.method === 'post' && userStore.isLogin) {
+            request.data = qs.stringify(request.data, {
+                arrayFormat: 'brackets'
+            })
         }
         console.log('****** request start ******')
         console.log(request)
@@ -46,8 +46,8 @@ api.interceptors.response.use(
         console.log('****** response start ******')
         console.log(response)
         console.log('****** response end ******')
-        if (response.data.status === 1) {
-            if (response.data.error === '') {
+        if (response.data.status === 1 || !response.data.hasOwnProperty('status')) {
+            if (response.data.error === ''|| !response.data.hasOwnProperty('status')) {
                 // 请求成功并且没有报错
                 return Promise.resolve(response.data)
             } else {
@@ -56,8 +56,7 @@ api.interceptors.response.use(
                 return Promise.reject(response.data)
             }
         } else {
-            return Promise.resolve(response.data)
-            // toLogin()
+            toLogin()
         }
     },
     error => {

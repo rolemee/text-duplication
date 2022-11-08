@@ -73,10 +73,6 @@ function showPassword() {
     <div>
         <div class="bg-banner" />
         <div id="login-box">
-<!--            <div class="login-banner">-->
-<!--                <div class="logo" />-->
-<!--                <img :src="banner" class="banner">-->
-<!--            </div>-->
             <el-form v-show="formType === 'login'" ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on">
                 <div class="title-container">
                     <h3 class="title">欢迎来到 {{ title }} ! 👋🏻</h3>

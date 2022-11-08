@@ -10,9 +10,12 @@
 import detailTable from "./detailTable"
 import detailForm from "./detailForm"
 import FormMode from './components/FormMode/index.vue'
+import api from "@/api"
 
 const router = useRouter()
 
+import useUserStore from "@/store/modules/user"
+const userStore = useUserStore()
 
 let formDetail = ref(detailForm.view.form)
 const data = ref({
@@ -71,6 +74,11 @@ onMounted(() => {
 })
 
 function getList() {
+    api.post('/getHomeworkList',{
+        usernameId: userStore.userId
+    }).then(res => {
+        console.log(res)
+    })
     data.value.tableData = [
         {
             'jobName': 'a',
@@ -90,9 +98,6 @@ function getList() {
 }
 
 // 搜索栏
-// 下拉表
-function remoteMethod() {}
-function onChange() {}
 // 搜索
 function handleSearch(val, callback) {
     data.value.searchData.searchString = {}
@@ -133,15 +138,13 @@ function handleEdit(val) {
     data.value.formModeProps.visible = true
 }
 
-// 弹窗
-function getDataList() {}
 </script>
 
 <template>
     <div>
         <page-header title="学生作业管理模块" />
         <page-main v-loading="data.loading">
-            <TopSearch :search="data.search" :options="data.options" @handleSearch="handleSearch" @remoteMethod="remoteMethod" @onChange="onChange"/>
+            <TopSearch :search="data.search" :options="data.options" @handleSearch="handleSearch" />
             <DetailTable
                 :columns="data.detailTable.columns"
                 :tableData="data.tableData"
@@ -159,7 +162,6 @@ function getDataList() {}
             :data="data.formModeProps.data"
             v-model="data.formModeProps.visible"
             :mode="data.formMode"
-            @success="getDataList"
             @update:modelValue="val => data.formModeProps.visible = val"
         />
     </div>

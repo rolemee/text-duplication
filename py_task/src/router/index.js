@@ -37,7 +37,7 @@ router.beforeEach(async(to, from, next) => {
                             name: 'dashboard',
                             replace: true
                         })
-                    } else if (!settingsStore.dashboard.enable && to.name == 'dashboard') {
+                    } else if (!settingsStore.dashboard.enable && to.name === 'dashboard') {
                         // 如果未开启控制台页面，则默认进入侧边栏导航第一个模块
                         if (menuStore.sidebarMenus.length > 0) {
                             next({
@@ -64,20 +64,6 @@ router.beforeEach(async(to, from, next) => {
                 case 'frontend':
                     await routeStore.generateRoutesAtFront(asyncRoutes)
                     break
-                case 'backend':
-                    await routeStore.generateRoutesAtBack()
-                    break
-                case 'filesystem':
-                    await routeStore.generateRoutesAtFilesystem(asyncRoutes)
-                    switch (settingsStore.menu.baseOn) {
-                        case 'frontend':
-                            await menuStore.generateMenusAtFront()
-                            break
-                        case 'backend':
-                            await menuStore.generateMenusAtBack()
-                            break
-                    }
-                    break
             }
             let removeRoutes = []
             routeStore.flatRoutes.forEach(route => {
@@ -99,7 +85,7 @@ router.beforeEach(async(to, from, next) => {
             })
         }
     } else {
-        if (to.name != 'login') {
+        if (to.name !== 'login') {
             next({
                 name: 'login',
                 query: {

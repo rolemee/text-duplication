@@ -31,6 +31,7 @@ function userCommand(command) {
             break
     }
 }
+
 </script>
 
 <template>
