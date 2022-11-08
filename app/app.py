@@ -37,7 +37,7 @@ def login():
 @app.route('/upload', methods=['GET', 'POST'])
 @check_login
 def upload_file():
-    return module.upload_file.upload_file(request, app)
+    return module.upload_file.upload_file(request, app, SECRET_KEY)
 @app.route('/userInfo', methods=['GET', 'POST'])
 # @check_login
 def userInfo():
