@@ -37,25 +37,10 @@ def sim():
                 res_dict_in_tmp['end2'] = file_lines[j * 2+1][1]
                 res_list.append(copy.deepcopy(res_dict_in_tmp))
                 res_dict_in_tmp.clear()
-
             res_dict["matches"] = res_list
             res.append(copy.deepcopy(res_dict))
-            # print(res_dict)
-            # exit(0)
     print(json.dumps(res))
     return res
-        # try:
-        #     if int(re.findall(r"consists for (\d+) % of ",i)[0])>50:
-        #         a = os.popen("sim_c++.exe -d -T -s -e -R submissions").read()
-        #         a = a.split("\n\n")[2:][0].split("\n")
-        #         # print(a[0])
-        #         print(re.findall("submissions/([\w\W].*?) line",a[0])[0])
-        #         # print(a[1])
-        #         print(re.findall("submissions/([\w\W].*?): line", a[1])[0])
-        # except:
-        #     print("error")
-        #     print(i)
-        #     exit(0)
 def jplag():
     os.system("test2\\java -jar jplag.jar -l cpp -r tmp   test2\\submissions")
     archive = zipfile.ZipFile('test2\\tmp.zip', 'r')

@@ -1,3 +1,5 @@
+import base64
+
 import jwt
 import datetime
 
@@ -19,3 +21,4 @@ payload = jwt.decode(token, 'secret', algorithms=['HS256'])  # 解密，校验�
 print(payload)
 # print(s)
 # print(type(s))
+
