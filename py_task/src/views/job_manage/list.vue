@@ -13,6 +13,7 @@ import FormMode from './components/FormMode/index.vue'
 
 
 import useUserStore from '@/store/modules/user'
+import api from "@/api";
 const userStore = useUserStore()
 
 let formDetail = ref(detailForm.view.form)
@@ -67,7 +68,6 @@ const data = ref({
         uploadData: {
             data: {
                 'token': userStore.token || '',
-                homeworkId: '1'
             }
         }
     },
@@ -78,19 +78,27 @@ onMounted(() => {
 })
 
 function getList() {
-    data.value.tableData = [
-        {
-            'jobName': 'a',
-            'jobType': 'code',
-            'jobTeacher': '蒋师傅',
-            'CourseName': '网络攻防',
-            'jobRemarks': '无',
-            'jobStartTime': '1667117394',
-            'jobEndTime': new Date().getTime()/1000,
-            'status': '未完成',
-            'color': 'color: red'
-        }
-    ]
+    api.post('/getHomeworkList',{
+        usernameId: userStore.userId
+    }).then(res => {
+        // console.log(res.data)
+        data.value.tableData = [
+            {
+                'jobName': res.data.homeworkName,
+                'jobType': 'code',
+                'jobTeacher': '蒋师傅',
+                'CourseName': '网络攻防',
+                'jobRemarks': '无',
+                'jobStartTime': new Date(res.data.start_time).getTime() / 1000,
+                'jobEndTime': new Date(res.data.stop_time).getTime()/1000,
+                'status': '未完成',
+                'color': 'color: red',
+                'homeworkType': res.data.homework_type,
+                'homeworkId': res.data.homeworkId,
+                'id': userStore.userId
+            }
+        ]
+    })
     data.value.options['jobType'].push({
         name: 'code',
         value: '编程'
@@ -123,7 +131,7 @@ function handleSearch(val, callback) {
 
 //table操作
 function handleView(val) {
-    console.log(val)
+    // console.log(val)
     data.value.formModeProps.title = val.jobName
     data.value.formModeProps.id = val.id
     data.value.formModeProps.type = 'view'
@@ -141,6 +149,7 @@ function handleEdit(val) {
     data.value.formModeProps.title = val.jobName
     data.value.formModeProps.id = val.id
     data.value.formModeProps.type = 'edit'
+    data.value.formModeProps.uploadData.data['homeworkId'] = val.homeworkId
     formDetail.value = JSON.parse(JSON.stringify(detailForm.submit.form))
     data.value.formModeProps.disabled = true
     data.value.formModeProps.visible = true

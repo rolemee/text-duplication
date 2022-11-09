@@ -53,6 +53,7 @@
 
 <script setup>
 import {ElMessage} from "element-plus"
+import api from "@/api";
 
 const props = defineProps({
     data: {
@@ -81,7 +82,7 @@ const props = defineProps({
     },
     ext: {
         type: Array,
-        default: ['txt', 'c', 'cpp', 'java', 'py', 'word']
+        default: [ 'c', 'cpp', 'java', 'py', 'word']
     }
 })
 
@@ -101,22 +102,31 @@ const myRule = computed({
 })
 
 onMounted(() => {
+    console.log(JSON.stringify(props.uploadData))
     getForm();
 })
 
 //初始化数据
 function getForm(){//通过id获取数据
-    data.value.form =  {
-        'jobName': 'a',
-        'CourseName': '网络攻防',
-        'jobRemarks': '无',
-        'jobStartTime': '1667117394',
-        'jobEndTime': new Date().getTime()/1000,
-        'detailFile': {
-            src: 'https://ctf.show/',
-            name: 'ctf'
+    data.value.loading = true
+    api.post('/getHomeworkList',{
+        usernameId: props.id
+    }).then(res => {
+        data.value.form = {
+            'jobName': res.data.homeworkName,
+            'jobType': 'code',
+            'jobTeacher': '蒋师傅',
+            'CourseName': '网络攻防',
+            'jobRemarks': '无',
+            'jobStartTime': new Date(res.data.start_time).getTime() / 1000,
+            'jobEndTime': new Date(res.data.stop_time).getTime() / 1000,
+            'homeworkType': res.data.homework_type,
+            'homeworkId': res.data.homeworkId
         }
-    }
+        data.value.loading = false
+    }).catch(() => {
+        data.value.loading = false
+    })
 }
 
 // //上传操作

@@ -77,20 +77,22 @@ function getList() {
     api.post('/getHomeworkList',{
         usernameId: userStore.userId
     }).then(res => {
-        console.log(res)
+        console.log(new Date(res.data.start_time).getTime() / 1000)
+        data.value.tableData = [
+            {
+                'jobName': res.data.homeworkName,
+                'CourseName': '网络攻防',
+                'teacherClass': '1、2',
+                'jobRemarks': '无',
+                'jobStartTime': new Date(res.data.start_time).getTime() / 1000,
+                'jobEndTime': new Date(res.data.stop_time).getTime() / 1000,
+                'color': 'color: red',
+                'completeRatio': 0.11,
+                'homeworkType': res.data.homework_type,
+                'homeworkId': res.data.homeworkId
+            }
+        ]
     })
-    data.value.tableData = [
-        {
-            'jobName': 'a',
-            'CourseName': '网络攻防',
-            'teacherClass': '1、2',
-            'jobRemarks': '无',
-            'jobStartTime': '1667117394',
-            'jobEndTime': new Date().getTime() / 1000,
-            'color': 'color: red',
-            'completeRatio': 0.11
-        }
-    ]
     data.value.options['jobType'].push({
         name: 'code',
         value: '编程'
@@ -119,11 +121,13 @@ function handleSearch(val, callback) {
 }
 
 // table操作
-function handleView() {
+function handleView(val) {
+    console.log(val.homeworkType)
     router.push({
         name: 'taskManageList',
         params: {
-            workId: 1,
+            workId: val.homeworkId,
+            workType: val.homeworkType
         }
     })
 }

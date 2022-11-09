@@ -23,7 +23,7 @@ export default {
             }
         },
         {
-            path: 'task/:workId',
+            path: 'task/:workId/:workType',
             name: 'taskManageList',
             component: () => import('@/views/comparative_table/detail.vue'),
             meta: {
@@ -36,7 +36,7 @@ export default {
             },
             children: [
                 {
-                    path: 'detail/:homeworkId/:rightName/:leftName',
+                    path: 'detail/:homeworkId/:homeworkType/:rightName/:leftName',
                     name: 'detailMatch',
                     component: () => import('@/views/detail_show/index.vue'),
                     meta: {

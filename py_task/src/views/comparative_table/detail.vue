@@ -41,6 +41,7 @@ function handleClick(val) {
         name: 'detailMatch',
         params: {
             homeworkId: route.params.workId,
+            homeworkType: route.params.workType,
             leftName: val.id1,
             rightName: val.id2
         }
@@ -49,10 +50,9 @@ function handleClick(val) {
 
 onMounted(() => {
     data.value.loading = true
-    api.get('/testb', {
-        params: {
-            homeworkId: route.params.workId,
-        }
+    api.post('/checkAllHomework', {
+        homeworkId: route.params.workId,
+        filetype: route.params.workType
     }).then(res => {
         data.value.tableData = res.data
         data.value.loading = false

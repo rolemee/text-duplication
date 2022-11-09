@@ -32,9 +32,10 @@ const data = ref({
 
 onMounted(() => {
     data.value.loading = true
-    api.get('/testd', {
+    api.get('/fileDiff', {
         params: {
             homeworkId: route.params.homeworkId,
+            filetype: route.params.homeworkType,
             file1: route.params.leftName,
             file2: route.params.rightName
         }
@@ -50,9 +51,12 @@ onMounted(() => {
             tmp++
         })
         let p = new Promise(resolve => {
-            api.get(`testc?filename=${route.params.rightName}`).then(res => {
-                data.value.rightData = res
-                data.value.rightDataList = JSON.parse(JSON.stringify(res)).split('\n')
+            api.post('/getHomeworkContent',{
+                homeworkId: route.params.homeworkId,
+                filename:  route.params.rightName
+            }).then(res => {
+                data.value.rightData = res.data.content
+                data.value.rightDataList = JSON.parse(JSON.stringify(res.data.content)).split('\n')
                 // console.log(data.value.rightDataList)
                 monaco.editor.create(document.getElementById('right-monaco'), {
                     value: data.value.rightData,
@@ -60,9 +64,12 @@ onMounted(() => {
                     fontSize: 15,
                     readOnly: true
                 })
-                api.get(`testc?filename=${route.params.leftName}`).then(re => {
-                    data.value.leftData = re
-                    data.value.leftDataList = JSON.parse(JSON.stringify(re)).split('\n')
+                api.post('/getHomeworkContent',{
+                    homeworkId: route.params.homeworkId,
+                    filename:  route.params.leftName
+                }).then(re => {
+                    data.value.leftData = re.data.content
+                    data.value.leftDataList = JSON.parse(JSON.stringify(re.data.content)).split('\n')
                     monaco.editor.create(document.getElementById('left-monaco'), {
                         value: data.value.leftData,
                         language: 'c',
