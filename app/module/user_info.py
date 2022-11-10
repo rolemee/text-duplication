@@ -27,7 +27,7 @@ def get_user_info(sql ,list):
 
 def get_user_homeworkList(request , rights):
     if rights == 0:
-        sql = "select h.homeworkId,homeworkName,homeworkDescribe,homework_type,start_time,stop_time,is_Finish from user_homework join homework h on h.homeworkId = user_homework.homeworkId join user u on u.usernameId = h.usernameId where h.usernameId = %s"
+        sql = "select h.homeworkId,homeworkName,homeworkDescribe,homework_type,start_time,stop_time,is_Finish from user_homework join homework h on h.homeworkId = user_homework.homeworkId join user u on u.usernameId = user_homework.usernameId where u.usernameId = %s"
         data = module.sql_query.sql_query(sql, [request.form.get("usernameId")])
         if data is None:
             return json.dumps({

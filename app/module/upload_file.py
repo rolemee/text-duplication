@@ -7,7 +7,7 @@ from pathlib import Path
 from werkzeug.utils import secure_filename
 import module.check_login
 from flask import flash, redirect, url_for
-ALLOWED_EXTENSIONS = set(['txt','c','cpp','java','py','word'])
+ALLOWED_EXTENSIONS = set(['c','cpp','java','py','word'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -27,7 +27,7 @@ def upload_file(request, app, SECRET_KEY):
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = base64.b64encode(file.filename.encode()).decode().replace("/","-")
+            filename = base64.urlsafe_b64encode(file.filename.encode()).decode()+"."+file.filename.rsplit('.', 1)[1].lower()
             file.save(os.path.join(app.config['UPLOAD_FOLDER'] +"/"+upload_dir + "/", filename))
             return json.dumps(
                 {

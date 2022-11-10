@@ -43,3 +43,10 @@ def login(data, SECRET_KEY):
                 "error": "参数丢失",
                 "data": {}
             })
+
+def no_rights():
+    return json.dumps({
+                "status": 0,
+                "error": "你目前暂无权限",
+                "data": {}
+            })
