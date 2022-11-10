@@ -1,7 +1,7 @@
 <script setup name="DuplicateCheckingIndex">
-import api from "@/api"
+import api from '@/api'
 import useUserStore from '@/store/modules/user'
-import {ElMessage} from "element-plus";
+import { ElMessage } from 'element-plus'
 const userStore = useUserStore()
 
 // const route = useRoute()
@@ -12,7 +12,7 @@ const data = ref({
     loading: false,
     uploadData: {
         token: userStore.token || '',
-        homeworkId: 0,
+        homeworkId: new Date().getTime()
     },
     uploadUrl: 'http://121.5.161.87:8888/upload',
     uploadType: {
@@ -60,21 +60,18 @@ const data = ref({
     },
     detailLoading: false
 })
-onMounted(() => {
-    data.value.uploadData.homeworkId = new Date().getTime()
-})
 
 const fileFirst = ref()
 const fileSecond = ref()
 
-function onChange(file,fileList) {
+function onChange(file, fileList) {
     console.log(file)
     console.log(fileList)
     if (data.value.uploadFiles.length === 2) {
         data.value.uploadFiles = []
         if (data.value.uploadStatus.first && data.value.uploadStatus.second) {
             if (data.value.uploadType.first === 'cpp') {
-               data.value.uploadType.second = data.value.uploadType.first = 'c++'
+                data.value.uploadType.second = data.value.uploadType.first = 'c++'
             }
             data.value.detailLoading = true
             data.value.showResult = true
@@ -94,8 +91,8 @@ function onChange(file,fileList) {
         }
         data.value.hasResult = true
         data.value.loading = false
-        data.value.uploadData.homeworkId = new Date().getTime()
-    }else {
+        // data.value.uploadData.homeworkId = new Date().getTime()
+    } else {
         if (fileList.length > 1) {
             fileList.shift()
         }
@@ -104,15 +101,15 @@ function onChange(file,fileList) {
         const isTypeOk = ext.indexOf(fileExt) !== -1
         if (!isTypeOk) {
             ElMessage.error(`文件上传只支持${ ext.join('/') }格式`)
-        }else {
+        } else {
             if (data.value.uploadName === 'first') {
                 // console.log(data.value.fileList.first)
                 data.value.uploadType.first = fileExt
-                data.value.filePath.first = document.getElementsByClassName("el-upload__input")[0].value
-            }else if (data.value.uploadName === 'second'){
+                data.value.filePath.first = document.getElementsByClassName('el-upload__input')[0].value
+            } else if (data.value.uploadName === 'second') {
                 // console.log(data.value.fileList.second)
                 data.value.uploadType.second = fileExt
-                data.value.filePath.second = document.getElementsByClassName("el-upload__input")[1].value
+                data.value.filePath.second = document.getElementsByClassName('el-upload__input')[1].value
                 console.log(data.value.filePath.second)
             }
             // console.log(fileExt)
@@ -121,7 +118,7 @@ function onChange(file,fileList) {
 }
 
 function handleSuccess(res, type) {
-    console.log("提交成功",type)
+    console.log('提交成功', type)
     console.log(data.value.uploadData.homeworkId)
     console.log(res)
     data.value.uploadName = ''
@@ -133,15 +130,15 @@ function handleSuccess(res, type) {
                 fileFirst.value.handleRemove(item)
             })
             data.value.filePath.first = ''
-        }else {
+        } else {
             data.value.fileList.second.forEach(item => {
                 fileSecond.value.handleRemove(item)
             })
             data.value.filePath.second = ''
         }
         data.value.uploadStatus[type] = false
-    }else {
-        ElMessage.success("上传成功")
+    } else {
+        ElMessage.success('上传成功')
         console.log(data.value.filePath.second)
         data.value.uploadStatus[type] = true
     }
@@ -150,9 +147,9 @@ function handleSuccess(res, type) {
 function onSubmit() {
     if (!data.value.filePath.first && !data.value.filePath.second) {
         ElMessage.error('必须上传两个文件')
-    }else if (data.value.uploadType.first !== data.value.uploadType.second) {
+    } else if (data.value.uploadType.first !== data.value.uploadType.second) {
         ElMessage.error('两个文件必须是统一个文件类型,eg: 1.cpp 2.cpp')
-    }else {
+    } else {
         data.value.loading = true
         fileFirst.value.submit()
         fileSecond.value.submit()
@@ -190,35 +187,35 @@ function handleClick(val) {
         <page-header title="文件对比模块" />
         <page-main v-loading="data.loading">
             <div>
-                <div class="tip">第一组文件夹：
-
+                <div class="tip">
+                    第一组文件夹：
                 </div>
                 <div class="fileUpload">
-                    <el-input v-model="data.filePath.first" disabled placeholder="请输入地址" style="width: 92%"/>
+                    <el-input v-model="data.filePath.first" disabled placeholder="请输入地址" style="width: 92%" />
                     <el-upload
                         ref="fileFirst"
                         :action="data.uploadUrl"
                         :data="data.uploadData"
                         :file-list="data.fileList.first"
-                        :show-file-list='false'
+                        :show-file-list="false"
                         :on-change="onChange"
                         :on-success="res => handleSuccess(res, 'first')"
                         :auto-upload="false"
                         class="upload"
                     >
-                        <el-button type="primary"  plain @click="data.uploadName = 'first'">选择文件</el-button>
+                        <el-button type="primary" plain @click="data.uploadName = 'first'">选择文件</el-button>
                     </el-upload>
                 </div>
-                <div style="border-bottom: #CDD0D6 1px dashed ;margin: 20px 0 15px 0"></div>
+                <div style="border-bottom: #CDD0D6 1px dashed ;margin: 20px 0 15px 0" />
                 <div class="tip">第二组文件夹：</div>
                 <div class="fileUpload">
-                    <el-input v-model="data.filePath.second" disabled placeholder="请输入地址" style="width: 92%"/>
+                    <el-input v-model="data.filePath.second" disabled placeholder="请输入地址" style="width: 92%" />
                     <el-upload
                         ref="fileSecond"
                         :action="data.uploadUrl"
                         :data="data.uploadData"
                         :file-list="data.fileList.second"
-                        :show-file-list='false'
+                        :show-file-list="false"
                         :on-change="onChange"
                         :on-success="res => handleSuccess(res, 'second')"
                         :auto-upload="false"
@@ -228,7 +225,7 @@ function handleClick(val) {
                     </el-upload>
                 </div>
             </div>
-            <div style="border-bottom: #CDD0D6 1px dashed ;margin: 20px 0 15px 0"></div>
+            <div style="border-bottom: #CDD0D6 1px dashed ;margin: 20px 0 15px 0" />
             <div style="display: flex; justify-content: flex-end;margin-right: 10px">
                 <el-button
                     v-if="data.hasResult"
@@ -239,14 +236,14 @@ function handleClick(val) {
                 >
                     查看结果
                 </el-button>
-                <el-button type="primary" plain  @click="onSubmit">确 定</el-button>
-                <el-button  @click="onCancel" >取 消</el-button>
+                <el-button type="primary" plain @click="onSubmit">确 定</el-button>
+                <el-button @click="onCancel">取 消</el-button>
             </div>
             <div class="endTip">
                 注意：一次上传要上传两个同类型的文件，且只能上传两个
             </div>
         </page-main>
-        <div  v-loading="data.detailLoading">
+        <div v-loading="data.detailLoading">
             <el-dialog
                 v-model="data.showResult"
                 draggable title="查重结果"
@@ -256,7 +253,7 @@ function handleClick(val) {
                 destroy-on-close
             >
                 <DetailTable
-                    :tableData="data.tableData"
+                    :table-data="data.tableData"
                     :columns="data.columns"
                     :option="data.option"
                     @handleClick="handleClick"

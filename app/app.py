@@ -82,30 +82,5 @@ def checkAllHomework():
 def fileDiff():
     return module.file_operation.fileDiff(request)
 
-
-
-
-@app.route('/testa', methods=['GET', 'POST'])
-def testa():
-    return json.dumps({"status": 1,
-                       "error": "",
-                       "data":  test2.code_diff.jplag()})
-@app.route('/testb', methods=['GET', 'POST'])
-def testb():
-    return json.dumps({"status": 1,
-                       "error": "",
-                       "data": test2.code_diff.sim()})
-@app.route('/testd', methods=['GET', 'POST'])
-def testd():
-    file1 = request.args.get("file1")
-    file2 = request.args.get("file2")
-    name=request.args.get("filename")
-    for i in test2.code_diff.sim():
-        if i['id1'] == file1 and i['id2'] == file2:
-            return {"status": 1,
-                       "error": "",
-                       "data":  i['matches']}
-    return {"status": 0,
-                       "error": "no such file",
-                       "data":  []}
 app.run(host=host,port=port)
+
