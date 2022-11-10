@@ -138,6 +138,8 @@ const useRouteStore = defineStore(
                     if (settingsStore.app.enablePermission) {
                         // console.log("get"+JSON.stringify(userStore.permissions))
                         const permissions = await userStore.getPermission()
+                        // console.log(permissions)
+                        // const permissions = [1]
                         // console.log("get"+JSON.stringify(permissions))
                         accessedRoutes = filterAsyncRoutes(asyncRoutes, permissions)
                     } else {

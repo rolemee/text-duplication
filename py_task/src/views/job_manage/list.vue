@@ -10,10 +10,9 @@
 import detailTable from "@/views/job_manage/detailTable"
 import detailForm from "@/views/job_manage/detailForm"
 import FormMode from './components/FormMode/index.vue'
-
+import api from "@/api"
 
 import useUserStore from '@/store/modules/user'
-import api from "@/api";
 const userStore = useUserStore()
 
 let formDetail = ref(detailForm.view.form)

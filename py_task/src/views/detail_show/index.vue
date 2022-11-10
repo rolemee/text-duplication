@@ -7,7 +7,11 @@ const router = useRouter()
 const activeNamesList = ref([])
 const activeNames = ref(['1'])
 function goBack() {
-    router.push({ name: 'taskManageList' })
+    if (typeof route.params.type === "undefined") {
+        router.push({ name: 'taskManageList' })
+    }else if (route.params.type === 'onlyDuplicate') {
+        router.push({ name: 'duplicateCheckingList' })
+    }
 }
 
 const data = ref({
@@ -31,6 +35,8 @@ const data = ref({
 })
 
 onMounted(() => {
+    // console.log(route.params.type)
+    // console.log(typeof route.params.type)
     data.value.loading = true
     api.get('/fileDiff', {
         params: {

@@ -102,7 +102,7 @@ const myRule = computed({
 })
 
 onMounted(() => {
-    console.log(JSON.stringify(props.uploadData))
+    // console.log(JSON.stringify(props.uploadData))
     getForm();
 })
 

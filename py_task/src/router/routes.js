@@ -115,7 +115,7 @@ let systemRoutes = [
 
 import JobManage from './modules/job.manage'
 import StudentJobManage from './modules/student.job.manage'
-
+import DuplicateChecking from './modules/duplicate.checking'
 // 动态路由（异步路由、导航栏路由）
 let asyncRoutes = [
     {
@@ -136,6 +136,15 @@ let asyncRoutes = [
         },
         children: [
             StudentJobManage
+        ]
+    },
+    {
+        meta: {
+            title: '文件查重模块',
+            auth: [0, 1]
+        },
+        children: [
+            DuplicateChecking
         ]
     }
 ]

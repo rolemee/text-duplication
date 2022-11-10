@@ -77,7 +77,7 @@ function getList() {
     api.post('/getHomeworkList',{
         usernameId: userStore.userId
     }).then(res => {
-        console.log(new Date(res.data.start_time).getTime() / 1000)
+        // console.log(new Date(res.data.start_time).getTime() / 1000)
         data.value.tableData = [
             {
                 'jobName': res.data.homeworkName,
@@ -122,7 +122,7 @@ function handleSearch(val, callback) {
 
 // table操作
 function handleView(val) {
-    console.log(val.homeworkType)
+    console.log(val.homeworkId)
     router.push({
         name: 'taskManageList',
         params: {
