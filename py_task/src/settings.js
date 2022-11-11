@@ -86,7 +86,7 @@ let globalSettings = {
         // 版权信息配置，格式为：Copyright © [dates] <company> <beian>
         dates: '2022/10/27-2022/12/10',
         company: 'Duplicate checking system',
-        website: 'https://github.com/rolemee/text-duplication',
+        website: 'https://gitee.com/rolemee/text-duplication',
         beian: ''
     }
 }
