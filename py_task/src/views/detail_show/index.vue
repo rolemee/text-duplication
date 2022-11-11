@@ -7,9 +7,9 @@ const router = useRouter()
 const activeNamesList = ref([])
 const activeNames = ref(['1'])
 function goBack() {
-    if (typeof route.params.type === "undefined") {
+    if (typeof route.params.type === 'undefined') {
         router.push({ name: 'taskManageList' })
-    }else if (route.params.type === 'onlyDuplicate') {
+    } else if (route.params.type === 'onlyDuplicate') {
         router.push({ name: 'duplicateCheckingList' })
     }
 }
@@ -135,7 +135,7 @@ onMounted(() => {
 
 <template>
     <div>
-        <page-header title="学生作业详情">
+        <page-header :title="route.params.type === 'onlyDuplicate' ? '查重对比详情' : '学生作业详情'">
             <el-button size="default" round @click="goBack">
                 <template #icon>
                     <el-icon>
