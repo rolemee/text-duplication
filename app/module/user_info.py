@@ -27,49 +27,55 @@ def get_user_info(sql ,list):
 
 def get_user_homeworkList(request , rights):
     if rights == 0:
-        sql = "select h.homeworkId,homeworkName,homeworkDescribe,homework_type,start_time,stop_time,is_Finish from user_homework join homework h on h.homeworkId = user_homework.homeworkId join user u on u.usernameId = user_homework.usernameId where u.usernameId = %s"
-        data = module.sql_query.sql_query(sql, [request.form.get("usernameId")])
+        sql = "select h.homeworkId,homeworkName,homeworkDescribe,homework_type,start_time,stop_time,is_Finish,teacher_name from user_homework right join homework h on h.homeworkId = user_homework.homeworkId right join user u on u.usernameId = user_homework.usernameId where user_homework.usernameId = %s"
+        data = module.sql_query.sql_query_all(sql, [request.form.get("usernameId")])
         if data is None:
             return json.dumps({
                 "status": 1,
                 "error": "",
                 "data": {}
             })
+        data_list = []
+        for i in data:
+            data_list.append({
+                "homeworkId":i[0],
+                "homeworkName":i[1],
+                "homeworkDescribe": i[2],
+                "homework_type": i[3],
+                "start_time": i[4],
+                "stop_time": i[5],
+                "is_Finish": i[6],
+                "teacherName": i[7]
+            })
         return json.dumps({
             "status": 1,
             "error": "",
-            "data": {
-                "homeworkId":data[0],
-                "homeworkName":data[1],
-                "homeworkDescribe": data[2],
-                "homework_type": data[3],
-                "start_time": data[4],
-                "stop_time": data[5],
-                "is_Finish": data[6],
-            }
+            "data": data_list
         },cls=ComplexEncoder)
     if rights == 1:
-        sql = "select h.homeworkId,homeworkName,homeworkDescribe,homework_type,start_time,stop_time,similarity from user_homework join homework h on h.homeworkId = user_homework.homeworkId join user u on u.usernameId = h.usernameId where h.usernameId = %s"
-        data = module.sql_query.sql_query(sql, [request.form.get("usernameId")])
+        sql = "select h.homeworkId,homeworkName,homeworkDescribe,homework_type,start_time,stop_time,completeness,teacher_name from user_homework right join homework h on h.homeworkId = user_homework.homeworkId right join user u on u.usernameId = user_homework.usernameId where user_homework.usernameId = %s"
+        data = module.sql_query.sql_query_all(sql, [request.form.get("usernameId")])
         if data is None:
             return json.dumps({
                 "status": 1,
                 "error": "",
                 "data": {}
             })
-
+        data_list = []
+        for i in data:
+            data_list.append({
+                "homeworkId":i[0],
+                "homeworkName":i[1],
+                "homeworkDescribe": i[2],
+                "homework_type": i[3],
+                "start_time": i[4],
+                "stop_time": i[5],
+                "completeness": i[6],
+                "teacher_name": i[7]
+            })
         return json.dumps({
             "status": 1,
             "error": "",
-            "data": {
-                "homeworkId":data[0],
-                "homeworkName":data[1],
-                "homeworkDescribe": data[2],
-                "homework_type": data[3],
-                "start_time": data[4],
-                "stop_time": data[5],
-                "similarity": data[6],
-            }
+            "data": data_list
         },cls=ComplexEncoder)
-
 

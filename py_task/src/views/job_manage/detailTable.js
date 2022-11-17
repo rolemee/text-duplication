@@ -16,25 +16,25 @@ let detailTable = {
         },
         {
             prop: 'CourseName',
-            label: '课程名'
+            label: '作业描述'
         },
-        {
-            prop: 'jobRemarks',
-            label: '备注'
-        },
+        // {
+        //     prop: 'jobRemarks',
+        //     label: '备注'
+        // },
         {
             prop: 'jobStartTime',
             label: '发布时间',
             sortable: true,
             width: '180px',
-            formatter: (row, column, cellValue) => dayjs(cellValue*1000).format('YYYY-MM-DD HH:mm:ss')
+            // formatter: (row, column, cellValue) => dayjs(cellValue*1000).format('YYYY-MM-DD HH:mm:ss')
         },
         {
             prop: 'jobEndTime',
             label: '截止时间',
             sortable: true,
             width: '180px',
-            formatter: (row, column, cellValue) => dayjs(cellValue*1000).format('YYYY-MM-DD HH:mm:ss')
+            // formatter: (row, column, cellValue) => dayjs(cellValue*1000).format('YYYY-MM-DD HH:mm:ss')
         },
         {
             prop: 'status',

@@ -10,13 +10,13 @@ let detailForm = {
                 label: '作业类型'
             },
             {
-                label: '课程名',
+                label: '作业描述',
                 name: 'CourseName'
             },
-            {
-                label: '备注',
-                name: 'jobRemarks'
-            },
+            // {
+            //     label: '备注',
+            //     name: 'jobRemarks'
+            // },
             {
                 label: '发布时间',
                 name: 'jobStartTime',
@@ -49,13 +49,13 @@ let detailForm = {
                 label: '作业类型'
             },
             {
-                label: '课程名',
+                label: '作业描述',
                 name: 'CourseName'
             },
-            {
-                label: '备注',
-                name: 'jobRemarks'
-            },
+            // {
+            //     label: '备注',
+            //     name: 'jobRemarks'
+            // },
             {
                 label: '截止时间',
                 name: 'jobEndTime',
@@ -63,7 +63,7 @@ let detailForm = {
             },
             {
                 prop: 'teacherClass',
-                label: '教学班级',
+                label: '老师',
                 sortable: true
             },
             {

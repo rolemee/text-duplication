@@ -7,7 +7,7 @@ from pathlib import Path
 from werkzeug.utils import secure_filename
 import module.check_login
 from flask import flash, redirect, url_for
-ALLOWED_EXTENSIONS = set(['c','cpp','java','py','word'])
+ALLOWED_EXTENSIONS = set(['c','cpp','java','py','word','go','rs', 'txt','asm'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

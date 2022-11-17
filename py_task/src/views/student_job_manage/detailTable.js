@@ -8,11 +8,11 @@ let detailTable = {
         },
         {
             prop: 'CourseName',
-            label: '课程名'
+            label: '作业描述'
         },
         {
             prop: 'teacherClass',
-            label: '教学班级',
+            label: '老师',
             sortable: true
         },
         {
@@ -20,7 +20,7 @@ let detailTable = {
             label: '发布时间',
             sortable: true,
             width: '180px',
-            formatter: (row, column, cellValue) => dayjs(cellValue*1000).format('YYYY-MM-DD HH:mm:ss')
+            // formatter: (row, column, cellValue) => dayjs(cellValue*1000).format('YYYY-MM-DD HH:mm:ss')
         },
         {
             prop: 'completeRatio',

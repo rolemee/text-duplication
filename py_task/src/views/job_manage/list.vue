@@ -26,7 +26,7 @@ const data = ref({
         detailForm:[
             {
                 name: 'CourseName',
-                label: '课程名',
+                label: '作业描述',
             },
             {
                 name: 'jobName',
@@ -80,23 +80,31 @@ function getList() {
     api.post('/getHomeworkList',{
         usernameId: userStore.userId
     }).then(res => {
+
         // console.log(res.data)
-        data.value.tableData = [
-            {
-                'jobName': res.data.homeworkName,
-                'jobType': 'code',
-                'jobTeacher': '蒋师傅',
-                'CourseName': '网络攻防',
-                'jobRemarks': '无',
-                'jobStartTime': new Date(res.data.start_time).getTime() / 1000,
-                'jobEndTime': new Date(res.data.stop_time).getTime()/1000,
-                'status': '未完成',
-                'color': 'color: red',
-                'homeworkType': res.data.homework_type,
-                'homeworkId': res.data.homeworkId,
-                'id': userStore.userId
-            }
-        ]
+        data.value.tableData = []
+        console.log(res.data)
+        // console.log(res.data.lenght)
+        // console.log(new Date(res.data.start_time).getTime() / 1000)
+        for (let i = 0; i < res.data.length; i++) {
+            data.value.tableData.push(
+                {
+                    'jobName': res.data[i]['homeworkName'],
+                    'jobType': res.data[i]['homework_type'],
+                    'jobTeacher': res.data[i]['teacherName'],
+                    'CourseName': res.data[i]['homeworkDescribe'],
+                    // 'jobRemarks': '无',
+                    'jobStartTime': res.data[i]['start_time'],
+                    'jobEndTime': res.data[i]['stop_time'],
+                    'status': res.data[i]['is_Finish'],
+                    'color': 'color: red',
+                    'homeworkType': res.data[i]['homework_type'],
+                    'homeworkId': res.data[i]['homeworkId'],
+                    'id': userStore.userId
+                }
+            )
+            console.log(data.value.tableData)
+        }
     })
     data.value.options['jobType'].push({
         name: 'code',

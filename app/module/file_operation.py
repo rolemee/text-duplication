@@ -5,8 +5,15 @@ import json
 import os
 import re
 import zipfile
-
-
+def type_transform(name:str):
+    if name.lower() == 'py' or name.lower() == 'python':
+        return "python3"
+    elif name.lower() == 'txt':
+        return "text"
+    elif name.lower() == 'asm':
+        return "8086"
+    else:
+        return name
 def getFile(request):
     homeworkId = request.form.get('homeworkId')
     filename = request.form.get('filename')
@@ -18,7 +25,7 @@ def getFile(request):
                 "data": {}
             })
     filename = "uploads/" + hashlib.md5(homeworkId.encode()).hexdigest() +"/"+base64.urlsafe_b64encode(filename.encode()).decode() + "." + filename.rsplit('.', 1)[1].lower()
-    with open(filename,"r") as a:
+    with open(filename,"r",encoding='utf-8') as a:
         return json.dumps({
                 "status": 1,
                 "error": "",
@@ -30,20 +37,28 @@ def getFile(request):
 def fileDiff(request):
     file1 = request.args.get("file1")
     file2 = request.args.get("file2")
-    filetype = request.args.get("filetype")
+    filetype = type_transform(request.args.get("filetype"))
+    sim_type = ['c++', 'c', '8086', 'java', 'lisp', 'm2', 'mira', 'pasc', 'text','8086']
     homeworkId = request.args.get('homeworkId')
-    for i in sim_check(filetype,homeworkId):
-        if i['id1'] == file1 and i['id2'] == file2:
-            return {"status": 1,
-                       "error": "",
-                       "data":  i['matches']}
+    if filetype in sim_type:
+        for i in sim_check(filetype,homeworkId):
+            if i['id1'] == file1 and i['id2'] == file2:
+                return {"status": 1,
+                           "error": "",
+                           "data":  i['matches']}
+    else:
+        for i in jplag_check(filetype,homeworkId):
+            if i['id1'] == file1 and i['id2'] == file2:
+                return {"status": 1,
+                           "error": "",
+                           "data":  i['matches']}
     return {"status": 0,
                        "error": "no such file",
                        "data":  []}
 
 def checkAllHomework(request):
-    sim_type=['c++','c','8086','java','lisp','m2','mira','pasc','text']
-    filetype = request.form.get("filetype")
+    sim_type=['c++','c','8086','java','lisp','m2','mira','pasc','text','asm']
+    filetype = type_transform(request.form.get("filetype"))
     homeworkId = request.form.get('homeworkId')
     if filetype in sim_type:
         res = sim_check(filetype,homeworkId)
@@ -54,6 +69,7 @@ def checkAllHomework(request):
 def sim_check(filetype,homeworkId):
     res = []
     res_dict = {}
+    filetype = type_transform(filetype)
     a = os.popen(f"plugin\\sim_{filetype}.exe -p -T -s -e -R uploads/{hashlib.md5(homeworkId.encode()).hexdigest()}").read()
     a = a.rstrip("\n")
     a = a.split("\n")[2:]
@@ -70,8 +86,12 @@ def sim_check(filetype,homeworkId):
             # print(a.split("\n\n")[1].split("\n")[0])
             file_lines = re.findall("line (\d*?)-(\d*?)[ \n]", a)
             # print(a.split("\n\n")[1].split("\n")[1])
-            res_dict["id1"] = base64.urlsafe_b64decode(file_list[0].split("/")[2].encode()).decode()
-            res_dict["id2"] = base64.urlsafe_b64decode(file_list[1].split("/")[2].encode()).decode()
+            if file_list[0].split("/")[2].split('.')[1] == 'java':
+                res_dict["id1"] = base64.urlsafe_b64decode(file_list[0].split("/")[2].split('.')[0].encode()).decode()
+                res_dict["id2"] = base64.urlsafe_b64decode(file_list[1].split("/")[2].split('.')[0].encode()).decode()
+            else:
+                res_dict["id1"] = base64.urlsafe_b64decode(file_list[0].split("/")[2].encode()).decode()
+                res_dict["id2"] = base64.urlsafe_b64decode(file_list[1].split("/")[2].encode()).decode()
             res_dict['similarity'] = str(similarity / 100)
             res_list = []
             res_dict_in_tmp = {}
@@ -89,6 +109,7 @@ def sim_check(filetype,homeworkId):
     return res
 
 def jplag_check(filetype,homeworkId):
+    filetype = type_transform(filetype)
     os.system(f"java -jar plugin/jplag.jar -l {filetype} -r plugin/tmp uploads/{hashlib.md5(homeworkId.encode()).hexdigest()}")
     archive = zipfile.ZipFile('plugin/tmp.zip', 'r')
     # Let us verify the operation..

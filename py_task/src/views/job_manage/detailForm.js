@@ -6,13 +6,13 @@ let detailForm = {
                 name: 'jobName'
             },
             {
-                label: '课程名',
+                label: '作业描述',
                 name: 'CourseName'
             },
-            {
-                label: '备注',
-                name: 'jobRemarks'
-            },
+            // {
+            //     label: '备注',
+            //     name: 'jobRemarks'
+            // },
             {
                 label: '发布时间',
                 name: 'jobStartTime',
@@ -41,13 +41,13 @@ let detailForm = {
                 name: 'jobName'
             },
             {
-                label: '课程名',
+                label: '作业描述',
                 name: 'CourseName'
             },
-            {
-                label: '备注',
-                name: 'jobRemarks'
-            },
+            // {
+            //     label: '备注',
+            //     name: 'jobRemarks'
+            // },
             {
                 label: '提交',
                 type: 'upload',

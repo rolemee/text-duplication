@@ -7,7 +7,7 @@ const userStore = useUserStore()
 // const route = useRoute()
 const router = useRouter()
 
-const ext = [ 'c', 'cpp', 'java', 'py', 'word']
+const ext = [ 'c', 'cpp', 'java', 'py', 'word', 'go', 'rs', 'txt', 'asm']
 const data = ref({
     loading: false,
     uploadData: {

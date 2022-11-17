@@ -28,7 +28,7 @@ const data = ref({
         detailForm:[
             {
                 name: 'CourseName',
-                label: '课程名',
+                label: '作业描述',
             },
             {
                 name: 'jobName',
@@ -77,21 +77,26 @@ function getList() {
     api.post('/getHomeworkList',{
         usernameId: userStore.userId
     }).then(res => {
+        data.value.tableData = []
+        console.log(res.data)
+        // console.log(res.data.lenght)
         // console.log(new Date(res.data.start_time).getTime() / 1000)
-        data.value.tableData = [
-            {
-                'jobName': res.data.homeworkName,
-                'CourseName': '网络攻防',
-                'teacherClass': '1、2',
+        for (let i = 0; i < res.data.length; i++) {
+            data.value.tableData.push({
+                'jobName': res.data[i]['homeworkName'],
+                'CourseName': res.data[i]['homeworkDescribe'],
+                'teacherClass': res.data[i]['teacher_name'],
                 'jobRemarks': '无',
-                'jobStartTime': new Date(res.data.start_time).getTime() / 1000,
+                'jobStartTime': res.data[i]['start_time'],
                 'jobEndTime': new Date(res.data.stop_time).getTime() / 1000,
                 'color': 'color: red',
-                'completeRatio': 0.11,
-                'homeworkType': res.data.homework_type,
-                'homeworkId': res.data.homeworkId
-            }
-        ]
+                'completeRatio': res.data[i]['completeness'],
+                'homeworkType': res.data[i]['homework_type'],
+                'homeworkId': res.data[i]['homeworkId']
+            })
+            console.log(data.value.tableData)
+        }
+
     })
     data.value.options['jobType'].push({
         name: 'code',

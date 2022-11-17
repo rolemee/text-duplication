@@ -6,25 +6,25 @@
             label-suffix=":"
             label-width="100px"
         >
-            <template v-for="(item,index) in props.data" :key="index" >
+            <template v-for="(item,index) in props.data" :key="index">
                 <el-form-item :label="item.label" :prop="item.name">
                     <el-date-picker
                         v-if="item.type === 'picker'"
-                        size="default"
                         v-model="data.form[item.name]"
+                        size="default"
                         type="datetime"
                         :disabled="props.disabled"
                         :default-value="new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDay())"
                         clearable
                     />
                     <template v-else-if="item.type === 'link'">
-                        <svg-icon name="ep:money" style="margin-right: 10px"/>
-                        <el-link :href="item.link.src" type="primary" target="_blank">{{item.link.name}}</el-link>
+                        <svg-icon name="ep:money" style="margin-right: 10px" />
+                        <el-link :href="item.link.src" type="primary" target="_blank">{{ item.link.name }}</el-link>
                     </template>
                     <template v-else-if="item.type === 'upload'">
                         <el-upload
-                            drag
                             ref="fileList"
+                            drag
                             :action="item.uploadUrl"
                             :data="props.uploadData"
                             :file-list="data.fileList"
@@ -52,8 +52,8 @@
 </template>
 
 <script setup>
-import {ElMessage} from "element-plus"
-import api from "@/api";
+import { ElMessage } from 'element-plus'
+import api from '@/api'
 
 const props = defineProps({
     data: {
@@ -82,7 +82,8 @@ const props = defineProps({
     },
     ext: {
         type: Array,
-        default: [ 'c', 'cpp', 'java', 'py', 'word']
+        // eslint-disable-next-line vue/require-valid-default-prop
+        default: ['c', 'cpp', 'java', 'py', 'word', 'go', 'rs', 'txt', 'asm']
     }
 })
 
@@ -96,20 +97,20 @@ const data = ref({
 const myVisible = ref(false)
 
 const myRule = computed({
-    get:function(){
+    get: function() {
         return props.rules
     }
 })
 
 onMounted(() => {
     // console.log(JSON.stringify(props.uploadData))
-    getForm();
+    getForm()
 })
 
-//初始化数据
-function getForm(){//通过id获取数据
+// 初始化数据
+function getForm() { // 通过id获取数据
     data.value.loading = true
-    api.post('/getHomeworkList',{
+    api.post('/getHomeworkList', {
         usernameId: props.id
     }).then(res => {
         data.value.form = {
@@ -148,8 +149,8 @@ function onSuccess(res) {
             data.value.fileList = JSON.parse(JSON.stringify(data.value.cacheFile))
         else
             data.value.fileList = []
-    }else {
-        ElMessage.success("上传成功")
+    } else {
+        ElMessage.success('上传成功')
     }
 }
 
@@ -164,7 +165,7 @@ function beforeUpload(file) {
     }
 }
 
-function handleChange(file,fileList) {
+function handleChange(file, fileList) {
     if (fileList.length > 1) {
         data.value.cacheFile = [fileList[0]]
         data.value.fileList = [file]

@@ -6,6 +6,14 @@ const route = useRoute()
 const router = useRouter()
 const activeNamesList = ref([])
 const activeNames = ref(['1'])
+function  type_transform(name) {
+    if (name === 'py' || name === 'python3') {
+        name = 'python'
+    } else if (name === 'c++' || name === 'c') {
+        name = 'cpp'
+    }
+    return name
+}
 function goBack() {
     if (typeof route.params.type === 'undefined') {
         router.push({ name: 'taskManageList' })
@@ -64,9 +72,10 @@ onMounted(() => {
                 data.value.rightData = res.data.content
                 data.value.rightDataList = JSON.parse(JSON.stringify(res.data.content)).split('\n')
                 // console.log(data.value.rightDataList)
+                console.log(route.params.homeworkType)
                 monaco.editor.create(document.getElementById('right-monaco'), {
                     value: data.value.rightData,
-                    language: 'c',
+                    language: type_transform(route.params.homeworkType),
                     fontSize: 15,
                     readOnly: true
                 })
@@ -78,7 +87,7 @@ onMounted(() => {
                     data.value.leftDataList = JSON.parse(JSON.stringify(re.data.content)).split('\n')
                     monaco.editor.create(document.getElementById('left-monaco'), {
                         value: data.value.leftData,
-                        language: 'c',
+                        language: type_transform(route.params.homeworkType),
                         fontSize: 15,
                         readOnly: true
                     })
@@ -111,16 +120,17 @@ onMounted(() => {
                         'editor.inactiveSelectionBackground': '#88000015'
                     }
                 });
+                // eslint-disable-next-line no-inner-declarations
                 monaco.editor.create(document.getElementById('left-monaco-list-' + i), {
                     value: leftDataDiff,
-                    language: 'c',
+                    language: type_transform(route.params.homeworkType),
                     readOnly: true,
                     fontSize: 15,
                     theme:'myTheme'
                 })
                 monaco.editor.create(document.getElementById('right-monaco-list-' + i), {
                     value: rightDataDiff,
-                    language: 'c',
+                    language: type_transform(route.params.homeworkType),
                     readOnly: true,
                     fontSize: 15,
                     theme: 'myTheme'
