@@ -79,7 +79,7 @@ onMounted(() => {
 })
 
 //初始化数据
-function getForm(){//通过id获取数据
+function getForm(){// 通过id获取数据
     data.value.form =  {
         'jobName': 'a',
         'CourseName': '网络攻防',

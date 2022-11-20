@@ -9,10 +9,6 @@ let detailForm = {
                 label: '作业描述',
                 name: 'CourseName'
             },
-            // {
-            //     label: '备注',
-            //     name: 'jobRemarks'
-            // },
             {
                 label: '发布时间',
                 name: 'jobStartTime',
@@ -44,10 +40,6 @@ let detailForm = {
                 label: '作业描述',
                 name: 'CourseName'
             },
-            // {
-            //     label: '备注',
-            //     name: 'jobRemarks'
-            // },
             {
                 label: '提交',
                 type: 'upload',

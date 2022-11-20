@@ -84,6 +84,10 @@ const props = defineProps({
         type: Array,
         // eslint-disable-next-line vue/require-valid-default-prop
         default: ['c', 'cpp', 'java', 'py', 'word', 'go', 'rs', 'txt', 'asm']
+    },
+    homeworkId: {
+        type: [String, Number],
+        default: ''
     }
 })
 
@@ -113,34 +117,25 @@ function getForm() { // 通过id获取数据
     api.post('/getHomeworkList', {
         usernameId: props.id
     }).then(res => {
-        data.value.form = {
-            'jobName': res.data.homeworkName,
-            'jobType': 'code',
-            'jobTeacher': '蒋师傅',
-            'CourseName': '网络攻防',
-            'jobRemarks': '无',
-            'jobStartTime': new Date(res.data.start_time).getTime() / 1000,
-            'jobEndTime': new Date(res.data.stop_time).getTime() / 1000,
-            'homeworkType': res.data.homework_type,
-            'homeworkId': res.data.homeworkId
-        }
+        res.data.forEach(item => {
+            if (item.homeworkId === props.homeworkId) {
+                data.value.form = {
+                    'jobName': item.homeworkName,
+                    'jobType': item.homework_type,
+                    'jobTeacher': item.teacherName,
+                    'CourseName': item.homeworkDescribe,
+                    'jobStartTime': item.start_time,
+                    'jobEndTime': item.stop_time,
+                    'homeworkType': item.homework_type,
+                    'homeworkId': item.homeworkId
+                }
+            }
+        })
         data.value.loading = false
     }).catch(() => {
         data.value.loading = false
     })
 }
-
-// //上传操作
-// import api from '@/api/index'
-// function handleUpload(file) {
-//     console.log(file)
-//     console.log(file.action)
-//     api.post(file.action, {
-//         file: file.file
-//     }).then(res => {
-//         console.log(res)
-//     })
-// }
 
 function onSuccess(res) {
     if (res.error !== '') {

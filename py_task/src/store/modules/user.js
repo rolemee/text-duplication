@@ -2,7 +2,7 @@ import api from '@/api'
 
 import useRouteStore from './route'
 import useMenuStore from './menu'
-import {ElMessage} from "element-plus";
+import { ElMessage } from 'element-plus'
 
 const useUserStore = defineStore(
     // 唯一ID

@@ -74,11 +74,12 @@ onMounted(() => {
 })
 
 function getList() {
+    data.value.loading = true
     api.post('/getHomeworkList',{
         usernameId: userStore.userId
     }).then(res => {
         data.value.tableData = []
-        console.log(res.data)
+        // console.log(res.data)
         // console.log(res.data.lenght)
         // console.log(new Date(res.data.start_time).getTime() / 1000)
         for (let i = 0; i < res.data.length; i++) {
@@ -94,9 +95,10 @@ function getList() {
                 'homeworkType': res.data[i]['homework_type'],
                 'homeworkId': res.data[i]['homeworkId']
             })
-            console.log(data.value.tableData)
         }
-
+        data.value.loading = false
+    }).catch(() => {
+        data.value.loading = false
     })
     data.value.options['jobType'].push({
         name: 'code',
@@ -136,16 +138,6 @@ function handleView(val) {
         }
     })
 }
-function handleEdit(val) {
-    // console.log(val)
-    console.log('编辑')
-    data.value.formModeProps.title = val.jobName
-    data.value.formModeProps.id = val.id
-    data.value.formModeProps.type = 'edit'
-    formDetail.value = JSON.parse(JSON.stringify(detailForm.edit.form))
-    data.value.formModeProps.disabled = true
-    data.value.formModeProps.visible = true
-}
 
 </script>
 
@@ -159,17 +151,16 @@ function handleEdit(val) {
                 :tableData="data.tableData"
                 :option="data.detailTable.option"
                 @handleView="handleView"
-                @handleEdit="handleEdit"
             />
         </page-main>
         <FormMode
             v-if="['dialog', 'drawer'].includes(data.formMode)"
             :id="data.formModeProps.id"
+            v-model="data.formModeProps.visible"
             :title="data.formModeProps.title"
             :type="data.formModeProps.type"
             :disabled="data.formModeProps.disabled"
             :data="data.formModeProps.data"
-            v-model="data.formModeProps.visible"
             :mode="data.formMode"
             @update:modelValue="val => data.formModeProps.visible = val"
         />

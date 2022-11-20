@@ -122,20 +122,6 @@ function showPassword() {
         justify-content: start;
         border-radius: 0;
         box-shadow: none;
-        //.login-banner {
-        //    width: 100%;
-        //    padding: 20px 0;
-        //    .banner {
-        //        position: relative;
-        //        right: inherit;
-        //        width: 100%;
-        //        max-width: 375px;
-        //        margin: 0 auto;
-        //        display: inherit;
-        //        top: inherit;
-        //        transform: translateY(0);
-        //    }
-        //}
         .login-form {
             width: 100%;
             min-height: auto;
@@ -158,8 +144,6 @@ function showPassword() {
     height: 100%;
     background: url('./src/assets/images/background-image.jpg') no-repeat center center;
     background-size: cover;
-    //background-position: center center;
-    //background: radial-gradient(circle at center, var(--el-fill-color-lighter), var(--el-bg-color-page));
 }
 #login-box {
     display: flex;
@@ -173,27 +157,6 @@ function showPassword() {
     border-radius: 10px;
     overflow: hidden;
     box-shadow: var(--el-box-shadow);
-    //.login-banner {
-    //    position: relative;
-    //    width: 450px;
-    //    background-color: var(--el-fill-color-light);
-    //    overflow: hidden;
-    //    .banner {
-    //        width: 100%;
-    //        @include position-center(y);
-    //    }
-    //    .logo {
-    //        position: absolute;
-    //        top: 20px;
-    //        left: 20px;
-    //        width: 30px;
-    //        height: 30px;
-    //        border-radius: 4px;
-    //        background: url("../assets/images/logo.png") no-repeat;
-    //        background-size: contain;
-    //        box-shadow: var(--el-box-shadow-light);
-    //    }
-    //}
     .login-form {
         display: flex;
         flex-direction: column;

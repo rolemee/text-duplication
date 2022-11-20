@@ -7,10 +7,10 @@
 }
 </route>
 <script setup name="JobManageList">
-import detailTable from "@/views/job_manage/detailTable"
-import detailForm from "@/views/job_manage/detailForm"
+import detailTable from '@/views/job_manage/detailTable'
+import detailForm from '@/views/job_manage/detailForm'
 import FormMode from './components/FormMode/index.vue'
-import api from "@/api"
+import api from '@/api'
 
 import useUserStore from '@/store/modules/user'
 const userStore = useUserStore()
@@ -18,10 +18,10 @@ const userStore = useUserStore()
 let formDetail = ref(detailForm.view.form)
 const data = ref({
     loading: false,
-    //表格
+    // 表格
     detailTable: detailTable,
     tableData: [],
-    //搜索
+    // 搜索
     search: {
         detailForm:[
             {
@@ -49,27 +49,28 @@ const data = ref({
         searchTime: {},
         searchString: {}
     },
-    //form
+    // form
     /**
      * 详情展示模式
      * dialog 对话框
      * drawer 抽屉
      */
     formMode: 'dialog',
-    //详情
+    // 详情
     formModeProps: {
         visible: false,
-        data: formDetail,//详细
+        data: formDetail, // 详细
         title: '',
         disabled: false,
         type: '',
         id: '',
+        homeWorkId: '',
         uploadData: {
             data: {
                 'token': userStore.token || '',
             }
         }
-    },
+    }
 })
 
 onMounted(() => {
@@ -77,15 +78,11 @@ onMounted(() => {
 })
 
 function getList() {
+    data.value.loading = true
     api.post('/getHomeworkList',{
         usernameId: userStore.userId
     }).then(res => {
-
-        // console.log(res.data)
         data.value.tableData = []
-        console.log(res.data)
-        // console.log(res.data.lenght)
-        // console.log(new Date(res.data.start_time).getTime() / 1000)
         for (let i = 0; i < res.data.length; i++) {
             data.value.tableData.push(
                 {
@@ -103,8 +100,11 @@ function getList() {
                     'id': userStore.userId
                 }
             )
-            console.log(data.value.tableData)
+            // console.log(data.value.tableData)
         }
+        data.value.loading = false
+    }).catch(() => {
+        data.value.loading = false
     })
     data.value.options['jobType'].push({
         name: 'code',
@@ -112,11 +112,11 @@ function getList() {
     })
 }
 
-//搜索栏
-//下拉表
+// 搜索栏
+// 下拉表
 function remoteMethod() {}
 function onChange() {}
-//搜索
+// 搜索
 function handleSearch(val, callback) {
     data.value.searchData.searchString = {}
     data.value.searchData.searchTime = {}
@@ -136,14 +136,15 @@ function handleSearch(val, callback) {
     callback && callback()
 }
 
-//table操作
+// table操作
 function handleView(val) {
     // console.log(val)
     data.value.formModeProps.title = val.jobName
     data.value.formModeProps.id = val.id
+    data.value.formModeProps.homeworkId = val.homeworkId
     data.value.formModeProps.type = 'view'
     formDetail.value = JSON.parse(JSON.stringify(detailForm.view.form))
-    formDetail.value[formDetail.value.length-1]['link'] = {//获取链接
+    formDetail.value[formDetail.value.length - 1]['link'] = { // 获取链接
         src: 'https://ctf.show/',
         name: 'ctf'
     }
@@ -158,12 +159,11 @@ function handleEdit(val) {
     data.value.formModeProps.type = 'edit'
     data.value.formModeProps.uploadData.data['homeworkId'] = val.homeworkId
     formDetail.value = JSON.parse(JSON.stringify(detailForm.submit.form))
+    data.value.formModeProps.homeworkId = val.homeworkId
     data.value.formModeProps.disabled = true
     data.value.formModeProps.visible = true
 }
 
-//弹窗
-function getDataList() {}
 </script>
 
 <template>
@@ -186,10 +186,10 @@ function getDataList() {}
             :type="data.formModeProps.type"
             :disabled="data.formModeProps.disabled"
             :data="data.formModeProps.data"
+            :homeworkId="data.formModeProps.homeworkId"
             :uploadData="data.formModeProps.uploadData.data"
             v-model="data.formModeProps.visible"
             :mode="data.formMode"
-            @success="getDataList"
             @update:modelValue="val => data.formModeProps.visible = val"
         />
     </div>

@@ -39,17 +39,13 @@ const useSettingsStore = defineStore(
             // 切换侧边栏导航展开/收起
             toggleSidebarCollapse() {
                 this.menu.subMenuCollapse = !this.menu.subMenuCollapse
-                if (this.mode == 'pc') {
+                if (this.mode === 'pc') {
                     this.subMenuCollapseLastStatus = !this.subMenuCollapseLastStatus
                 }
             },
             // 设置主题颜色模式
             setColorScheme(color) {
                 this.app.colorScheme = color
-            },
-            // 更新主题配置
-            updateThemeSetting(data) {
-                Object.assign(this, data)
             }
         }
     }

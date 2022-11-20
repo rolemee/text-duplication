@@ -144,7 +144,7 @@ function getDataList() {
         data.value.search['endTime'] = data.value.time[1]
     }
     // console.log(JSON.stringify(data.value.search))
-    $myEmit("handleSearch",data.value.search,() =>{
+    $myEmit('handleSearch',data.value.search,() =>{
         loading.value = false
         // data.value.search = {}
         // data.value.time = ''
@@ -156,14 +156,9 @@ function getDataList() {
 <style lang="scss" scoped>
 .searchBack{
     margin: 0 0 10px 0;
-    //background: #e6f7ff;
     display: flex;
     flex-direction: row;
     align-items: center;
-    //justify-content: center;
-    //border-bottom: 3px solid  #e6f7ff;
-    //box-shadow: var(--el-box-shadow-lighter);
-    //box-shadow: 0px -1px 1px 1px #e6f7ff inset;
     .el-form-item{
         position: relative;
         top:7px;
