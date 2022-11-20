@@ -18,7 +18,7 @@ def check_login(func):
             ses = request.cookies.get("session")
         else:
             ses = request.form.get("token")
-        print(module.check_login.jwt_check(ses, SECRET_KEY))
+        # print(module.check_login.jwt_check(ses, SECRET_KEY))
         if module.check_login.jwt_check(ses, SECRET_KEY)['account'] != "guest":
             return func(*args,**kwargs)
         else:
@@ -35,7 +35,7 @@ def check_rights(func):
             ses = request.cookies.get("session")
         else:
             ses = request.form.get("token")
-        print(module.check_login.jwt_check(ses, SECRET_KEY))
+        # print(module.check_login.jwt_check(ses, SECRET_KEY))
         if module.check_login.jwt_check(ses, SECRET_KEY)['rights'] != 0 :
             return func(*args,**kwargs)
         else:

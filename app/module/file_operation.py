@@ -105,7 +105,7 @@ def sim_check(filetype,homeworkId):
                 res_dict_in_tmp.clear()
             res_dict["matches"] = res_list
             res.append(copy.deepcopy(res_dict))
-    print(json.dumps(res))
+    # print(json.dumps(res))
     return res
 
 def jplag_check(filetype,homeworkId):
@@ -123,7 +123,17 @@ def jplag_check(filetype,homeworkId):
             textdata['id1'] = base64.urlsafe_b64decode(textdata['id1']).decode()
             textdata['id2'] = base64.urlsafe_b64decode(textdata['id2']).decode()
             similarity_list.append(textdata)
-    print(similarity_list)
+    # print(similarity_list)
     archive.close()
     os.unlink("plugin/tmp.zip")
     return similarity_list
+
+
+sim_type=['c++','c','8086','java','lisp','m2','mira','pasc','text','asm']
+filetype = type_transform("c++")
+homeworkId = "11"
+if filetype in sim_type:
+    res = sim_check(filetype,homeworkId)
+else:
+    res = jplag_check(filetype,homeworkId)
+

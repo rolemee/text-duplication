@@ -14,11 +14,11 @@ dic = {
 
 
 token = jwt.encode(dic, 'secret', algorithm='HS256')                            # 加密生成字符串
-print(token)
+# print(token)
 
 payload = jwt.decode(token, 'secret', algorithms=['HS256'])  # 解密，校验签名
 
-print(payload)
+# print(payload)
 # print(s)
 # print(type(s))
 

@@ -34,7 +34,7 @@ def Count(resfile):
 
         # 字典按键值降序
         dic = sorted(t.items(), key=lambda t: t[1], reverse=True)
-        print(dic)
+        # print(dic)
         # print()
         s.close()
         return (dic)

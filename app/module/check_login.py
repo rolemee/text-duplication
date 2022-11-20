@@ -9,7 +9,7 @@ dic = {
     },
 }
 def jwt_check(session,SECRET_KEY):
-    print(jwt.decode(session, SECRET_KEY, algorithms=['HS256']))
+    # print(jwt.decode(session, SECRET_KEY, algorithms=['HS256']))
     try:
         return jwt.decode(session, SECRET_KEY, algorithms=['HS256'])['data']
     except:
@@ -23,7 +23,7 @@ def login(data, SECRET_KEY):
         if res is not None:
             dic['data']['account'] = data.get("account")
             dic['data']['rights'] = res[2]
-            print(dic)
+            # print(dic)
             return json.dumps({
                 "status": 1,
                 "error": "",

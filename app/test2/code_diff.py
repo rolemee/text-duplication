@@ -39,7 +39,7 @@ def sim():
                 res_dict_in_tmp.clear()
             res_dict["matches"] = res_list
             res.append(copy.deepcopy(res_dict))
-    print(json.dumps(res))
+    # print(json.dumps(res))
     return res
 def jplag():
     os.system("test2\\java -jar jplag.jar -l cpp -r tmp   test2\\submissions")
@@ -52,10 +52,10 @@ def jplag():
         if float(i['similarity']) >= 0.5:
             txtdata = archive.read(i['first_submission']+"-"+i['second_submission']+".json")
             similarity_list.append(eval(txtdata.decode()))
-    print(similarity_list)
+    # print(similarity_list)
     archive.close()
     return similarity_list
     # os.unlink("tmp.zip")
 # jplag()
 # code_diff.sim()
-print(sim())
+# print(sim())

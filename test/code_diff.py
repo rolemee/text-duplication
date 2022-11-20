@@ -42,7 +42,7 @@ def sim():
             res.append(copy.deepcopy(res_dict))
             # print(res_dict)
             # exit(0)
-    print(json.dumps(res))
+    # print(json.dumps(res))
         # try:
         #     if int(re.findall(r"consists for (\d+) % of ",i)[0])>50:
         #         a = os.popen("sim_c++.exe -d -T -s -e -R submissions").read()
@@ -66,7 +66,7 @@ def jplag():
         if float(i['similarity']) >= 0.5:
             txtdata = archive.read(i['first_submission']+"-"+i['second_submission']+".json")
             similarity_list.append(txtdata.decode())
-    print(similarity_list)
+    # print(similarity_list)
     archive.close()
     # os.unlink("tmp.zip")
 # jplag()
