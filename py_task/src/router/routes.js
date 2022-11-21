@@ -141,7 +141,7 @@ let asyncRoutes = [
     {
         meta: {
             title: '文件查重模块',
-            auth: [0, 1]
+            auth: [1]
         },
         children: [
             DuplicateChecking
