@@ -20,6 +20,7 @@ export default ({ mode, command }) => {
         server: {
             open: true,
             port: 9001,
+            // host: 部署的ip地址
             proxy: {
                 '/proxy': {
                     target: env.VITE_APP_API_BASEURL,
