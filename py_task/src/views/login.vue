@@ -142,7 +142,7 @@ function showPassword() {
     z-index: 0;
     width: 100%;
     height: 100%;
-    background: url('./src/assets/images/background-image.jpg') no-repeat center center;
+    background: url('@/assets/images/background-image.jpg') no-repeat center center;
     background-size: cover;
 }
 #login-box {

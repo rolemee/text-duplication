@@ -145,7 +145,8 @@ function handleSuccess(res, type) {
         }
         data.value.uploadStatus[type] = false
     } else {
-        ElMessage.success('上传成功')
+        ElMessage.success('上传成功'+data.value.fileList[type][0].name)
+        // console.log()
         console.log(data.value.filePath.second)
         data.value.uploadStatus[type] = true
     }

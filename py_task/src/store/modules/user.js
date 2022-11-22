@@ -31,13 +31,13 @@ const useUserStore = defineStore(
                         document.cookie = 'session=' + res.data.session
                         this.token = res.data.session
                         this.userId = data.account
-                        localStorage.setItem('userId' , data.account)
+                        localStorage.setItem('userId', data.account)
                         localStorage.setItem('token', res.data.session)
                         api.post('/userInfo', {
                             usernameId: data.account
-                        }).then(res => {
-                            localStorage.setItem('account', res.data.name)
-                            this.account = res.data.name
+                        }).then(re => {
+                            localStorage.setItem('account', re.data.name)
+                            this.account = re.data.name
                             resolve()
                         })
                     }).catch(error => {

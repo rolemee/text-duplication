@@ -113,16 +113,14 @@ function onCancel() {
                     </el-form>
                 </el-col>
             </el-row>
+            <fixed-action-bar>
+                <el-button type="default" size="large" @click="onCancel">取消</el-button>
+                <el-button type="primary" size="large" @click="onSubmit">提交</el-button>
+            </fixed-action-bar>
         </page-main>
-        <fixed-action-bar>
-            <el-button type="default" size="large" @click="onCancel">取消</el-button>
-            <el-button type="primary" size="large" @click="onSubmit">提交</el-button>
-        </fixed-action-bar>
     </div>
 </template>
 
-
-
-<style scoped>
-
+<style scoped lang="scss">
+//scss
 </style>
