@@ -70,4 +70,5 @@ def jplag():
     archive.close()
     # os.unlink("tmp.zip")
 # jplag()
+sim()
 
